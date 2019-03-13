@@ -7377,6 +7377,7 @@ h1, h2, h3, h4, h5,
         .ftco-navbar-light .navbar-nav > .nav-item.ftco-seperator:before {
           display: none; } }
   .ftco-navbar-light .navbar-nav > .nav-item.cta > button {
+    width: 100%;
     border:1px solid gray;
     color: #fff;
     background: #109fd1; }
