@@ -7334,7 +7334,7 @@ h1, h2, h3, h4, h5,
     .ftco-navbar-light .navbar-nav {
       padding-bottom: 10px; } }
   .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
-    font-size: 13px;
+    font-size: 17px;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     padding-left: 20px;
@@ -7346,6 +7346,7 @@ h1, h2, h3, h4, h5,
       color: #fff; }
     @media (max-width: 991.98px) {
       .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
+        text-align:center;
         padding-left: 0;
         padding-right: 0;
         padding-top: .9rem;
@@ -7375,21 +7376,26 @@ h1, h2, h3, h4, h5,
       @media (max-width: 991.98px) {
         .ftco-navbar-light .navbar-nav > .nav-item.ftco-seperator:before {
           display: none; } }
-  .ftco-navbar-light .navbar-nav > .nav-item.cta > a {
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > button {
+    border:1px solid gray;
     color: #fff;
     background: #109fd1; }
     @media (max-width: 767.98px) {
-      .ftco-navbar-light .navbar-nav > .nav-item.cta > a:last-child {
+      .ftco-navbar-light .navbar-nav > .nav-item.cta > button:last-child {
+        border:1px solid gray;
+        width: 100%;
+        text-align:center;
         margin-bottom: 5px; } }
-    .ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover {
+    .ftco-navbar-light .navbar-nav > .nav-item.cta > button:hover {
       color: #fff; }
     @media (max-width: 767.98px) {
-      .ftco-navbar-light .navbar-nav > .nav-item.cta > a {
+      .ftco-navbar-light .navbar-nav > .nav-item.cta > button {
         padding-left: 15px;
         padding-right: 15px; } }
-  .ftco-navbar-light .navbar-nav > .nav-item.cta.cta-colored > a {
+  .ftco-navbar-light .navbar-nav > .nav-item.cta.cta-colored > button {
+    border:1px solid gray;
     background: #ff8f56 !important; }
-  .ftco-navbar-light .navbar-nav > .nav-item.active > a {
+  .ftco-navbar-light .navbar-nav > .nav-item.active > button {
     color: white; }
   .ftco-navbar-light .navbar-toggler {
     border: none;
@@ -7574,7 +7580,7 @@ h1, h2, h3, h4, h5,
     z-index: 0;
     background: tertiary; }
     .owl-carousel.home-slider .slider-item {
-      background-size: cover;
+      background-size: contain;
       background-repeat: no-repeat;
       background-position: center center;
       height: 650px;
