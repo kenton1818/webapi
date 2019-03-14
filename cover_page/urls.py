@@ -24,6 +24,7 @@ urlpatterns = [
     path('find_my_product/', views.find_my_product, name='find_my_product'),
     path('Search/', views.Web_scrawler, name='search'),
     path('login/', views.login, name='login'),
+    path('registor/', views.registor, name='registor'),
     
 
 ]

@@ -88,6 +88,9 @@ button:hover {
 
 /* Add Zoom Animation */
 
+
+
+
 </style>
 <script>
 function closeWin()   // Tested Code
@@ -98,24 +101,38 @@ someIframe.parentNode.removeChild(window.parent.document.getElementById('iframe_
 
 </script>
 
+
+
+
+
+
+
   <form action="">
-    <div class="imgcontainer">
-          <div class="iconcontain">
-      <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
-      <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar"  width =  "50%",  height = "50%"  border-radius = "50%">
+       
+    <div class="imgcontainer"  >
+      <span onclick="document.getElementById('register').style.display='none'" class="close" title="Close PopUp">&times;</span>
+      <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
       <h1 style="text-align:center">Welcome Price Aggregator</h1>
     </div>
 
-    </div>
-    <div class="container">
+    <div class="container" id ='imgcontainer'>
       <input type="text" placeholder="Enter Username" name="uname">
-      <input type="password" placeholder="Enter Password" name="psw">        
-      <button type="submit">Login</button>
-      <input type="checkbox" style="margin:26px 30px;"> Remember me      
-      <a href="#" style="text-decoration:none; float:right; margin-right:34px; margin-top:26px;">Forgot Password ?</a>
+      <input type="text" placeholder="Email" name="email">
+      <input type="text" placeholder="Password" name="psw">
+      <input type="text" placeholder="Password again" name="psw">
+      <div calss = "popup_but">
+      <button class = "pop_btu" type="submit" >Register</button>
+        </div>
     </div>
-    
   </form>
+
+
+
+
+
+
+
+
 
 <!--
 <div id="snackbar">Some text some message..</div>

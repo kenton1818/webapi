@@ -21,6 +21,9 @@ from .forms import LoginForm
 def login (request):
     return render(request,'login.html', {})
 
+def registor (request):
+    return render(request,'registor.html', {})
+
 '''
 def login(request):
     if request.method == "POST":

@@ -31,7 +31,11 @@
 
 
 <div id="login" class="modal">
-  <iframe class = 'modal-content animate' src="/login/" width="50%" height="80%"></iframe>
+  <iframe class = 'loginmodal-content animate' src="/login/" width="50%" height="80%"></iframe>
+</div>
+
+<div id="registor" class="modal">
+  <iframe class = 'registormodal-content animate' src="/registor/" width="50%" height="80%"></iframe>
 </div>
 
 
@@ -49,8 +53,8 @@
             <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
             
               <!--  login in -->
-            <li class="nav-item cta"><button id = "click_login" onclick="btnAction()" class="nav-link ml-lg-2"><span class="icon-user"></span  > Sign-In</button></li>
-<li class="nav-item cta cta-colored"><button onclick="document.getElementById('register').style.display='block'"  class="nav-link"><span class="icon-pencil"></span> Sign-Up</button></li>
+            <li class="nav-item cta"><button id = "click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span class="icon-user"></span  > Sign-In</button></li>
+            <li class="nav-item cta cta-colored"><button onclick="btnRegistorAction()"   class="nav-link"><span class="icon-pencil"></span> <S>  </S>ign-Up</button></li>
           </ul>
         </div>
       </div>
@@ -95,7 +99,15 @@
 }
 
 /* Modal Content Box */
-.modal-content {
+.loginmodal-content {
+    background-color: #fefefe;
+    margin: 7% auto 15% auto;
+    border: 1px solid #888;
+    width: 40%; 
+  padding-bottom: 30px;
+
+} /* Modal Content Box */
+.registormodal-content {
     background-color: #fefefe;
     margin: 7% auto 15% auto;
     border: 1px solid #888;
@@ -132,8 +144,12 @@
 <!-- 當用戶點下login時自動宿回negbar -->
 
 <script >
-        function btnAction()
+        function btnLoginAction()
         {document.getElementById('login').style.display='block' ;
+        $("#ftco-nav").collapse('hide');
+      }
+      function btnRegistorAction()
+        {document.getElementById('registor').style.display='block' ;
         $("#ftco-nav").collapse('hide');
       }
 </script>
@@ -141,32 +157,47 @@
 </script>
 <script>
 var login = document.getElementById('login');
-var register = document.getElementById('register');
+var registor = document.getElementById('registor');
 window.onclick = function(event) {
     if (event.target == login) {
         login.style.display = "none";
     }
-      if (event.target == register) {
-        register.style.display = "none";
+      if (event.target == registor) {
+        registor.style.display = "none";
     }
 }
 </script>
 <style >
     @media (max-width: 991.98px) {
-    .modal-content.animate {
+    .loginmodal-content.animate {
       width: 60%;
       height:80%;
     } 
     }
 @media (max-width: 767.98px)
 {
-    .modal-content.animate {
+    .loginmodal-content.animate {
+      width: 90%;
+      height:90%;
+    } 
+}
+
+    @media (max-width: 991.98px) {
+    .registormodal-content.animate {
+      width: 60%;
+      height:80%;
+    } 
+    }
+@media (max-width: 767.98px)
+{
+    .registormodal-content.animate {
       width: 90%;
       height:90%;
     } 
 }
 
 </style>
+
 
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
