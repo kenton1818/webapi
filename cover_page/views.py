@@ -4,7 +4,7 @@ import requests
 import re
 from collections import OrderedDict
 import xlwt
-
+from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login
@@ -22,6 +22,36 @@ from django.urls import reverse
 print(os.listdir())
 from cover_page.forms import SignUpForm
 # Create your views here.
+
+def UserRegistrationsAPI(request):
+        get =request.GET
+        email = get.get('email')
+        password =get.get('password')
+        print(email)
+        print(password)
+        user = authenticate(email=email, password=password)
+        #帳號正確
+        if user is not None:
+            #帳號被凍結
+            if user.is_active:
+                d={ 'status': 0,
+                    'message': 'inactive'}
+                return JsonResponse(d)
+            else: 
+            #無凍結
+                d={ 'status': 1,
+                    'message': 'success'}
+                return JsonResponse(d)
+        #帳號不正確
+        else:
+            d={'status': 2,
+               'message': 'invalid'}
+            return JsonResponse(d)
+        #server 沒有回應
+        d={'status': 3,
+           'message': "denied"}
+        return JsonResponse(d)
+
 
 
 
@@ -51,6 +81,7 @@ def signup(request):
     else:
         print('oooooo')
         form = SignUpForm()
+
     return HttpResponse(json.dumps({"message": "Denied"}),content_type="application/json")
     # return render(request, 'registration/signup.html', {'form':form})
 
@@ -75,7 +106,9 @@ def loginUser(request):
             print('kkkk')
             return HttpResponse(json.dumps({"message": "inactive"}), content_type="application/json")
     else:
+        print('invalid')
         return HttpResponse(json.dumps({"message": "invalid"}),content_type="application/json")
+    print('denied')
     return HttpResponse(json.dumps({"message": "denied"}),content_type="application/json")
 
 
@@ -127,6 +160,7 @@ def Cover_page(request):
     images, urls, names, prices, tags = recent_crawler()
     product_datas = [i for i in zip(images,urls,names,prices,tags)]
     context = {}
+    print(request.user)
     a = [i for i in product_datas if i[-1] == 'Carousell'] 
     a = random.sample(a,3)
     product_datas = random.sample(product_datas,len(product_datas)) 
@@ -134,7 +168,7 @@ def Cover_page(request):
     context['product_datas'] = product_datas
     context["no_picture"] = "/images/s.gif"
     context['length'] = len(tags)
-    context['user'] = request.user
+
     return render(request,'index.html', context)
 
 def Web_scrawler(request):

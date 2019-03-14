@@ -25,7 +25,7 @@ urlpatterns = [
     path('Search/', views.Web_scrawler, name='search'),
     path('signup/', views.signup, name='signup'),
     path('login/', views.loginUser, name='login'),
-    
+    path('UserRegistrationsAPI/', views.UserRegistrationsAPI, name='UserRegistrationsAPI'),
     
 
 ]

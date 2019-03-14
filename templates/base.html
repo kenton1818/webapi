@@ -117,9 +117,9 @@
             <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
             <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
             
-            {% if user.is_authentication %}
-                
-                {{ user.username }}
+            {% if user.is_authenticated %}
+              <script type="text/javascript">alert('okok')</script>
+                {{ user}}
               {% else %}
               <!--  login in -->
             <li class="nav-item cta"><button id = "click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span class="icon-user"></span  > Sign-In</button></li>

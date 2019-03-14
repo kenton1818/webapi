@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cover_page',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
