@@ -33,19 +33,26 @@
 
 <div id="login" class="modal">
   <form class="loginmodal-content animate" action="/action_page.php">
+    
+      <div class="imgcontainer"     text-align ="center" margin = "24px 0 12px 0" position = "relative">
+      <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
+      <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar"  >
+      <h1 style="text-align:center;font-size: 23px;" >Welcome Price Aggregator</h1>
+    </div><center>
     <div class="form-group">
+     
                                           <label for="exampleInputUsername">Email</label>
-                                          <input type="email" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp" placeholder="Email">
+                                          <input style="width: 80%;" type="email" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp" placeholder="Email">
                                           <small id="emailHelp" class="form-text text-muted">Enter your registred E-mail ID</small>
                                         </div>
+                            <div class="form-group">
 
-                                        <div class="form-group">
                                           <label for="exampleInputPassword">Password</label>
-                                          <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password" />
+                                          <input style="width: 80%;"  type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password" />
                                           <div id="errorlogin" style="color:red"></div>
                                         </div>
-                                        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="userlogin()">Login</button>
-                                        
+                                         <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="userlogin()">Login</button>
+              </center>                           
   </form>
 </div>
 
@@ -53,40 +60,43 @@
 
 <div id="registor" class="modal">
   <form class="registormodal-content animate" action="/action_page.php">
-    <div class="imgcontainer">
+    
+      <div class="imgcontainer"     text-align ="center" margin = "24px 0 12px 0" position = "relative">
       <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
-      <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
-      <h1 style="text-align:center">Welcome Price Aggregator</h1>
+      <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar"  >
+      <h1 style="text-align:center;font-size: 23px;" >Welcome Price Aggregator</h1>
     </div>
+    <center>
 <div class="form-group">
         <div id="errorname" style="color:red">
                                         </div>
-                                          <label for="InputFname">First Name</label>
-                                          <input type="text" class="form-control" id="InputFname" aria-describedby="emailHelp" placeholder="First Name">
+                                          <label  for="InputFname">First Name</label>
+                                          <input style="width: 50%;" type="text" class="form-control" id="InputFname" aria-describedby="emailHelp" placeholder="First Name">
                                         </div>
 
                                         <div class="form-group">
                                           <label for="InputLname">Last Name</label>
-                                          <input type="text" class="form-control" id="InputLname" aria-describedby="emailHelp" placeholder="Last Name">
+                                          <input style="width: 50%;" type="text" class="form-control" id="InputLname" aria-describedby="emailHelp" placeholder="Last Name">
                                         </div>
-
+                                        
                                         <div class="form-group">
                                         <div id="erroremail" style="color:red">
                                         </div>
                                           <label for="InputEmail">Email address</label>
-                                          <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                                          <input style="width: 80%;" type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter email">
                                         </div>
                                         
                                         <div class="form-group">
                                         <div id="errorpass" style="color:red">
                                         </div>
                                           <label for="Password1">Create Password</label>
-                                          <input type="password" class="form-control" id="Password1" placeholder="Password" />
+                                          <input style="width: 80%;" type="password" class="form-control" id="Password1" placeholder="Password" />
                                         </div>
                                         <div class="form-group">
                                           <label for="InputPassword2">Confirm Password</label>
-                                          <input type="password" class="form-control" id="InputPassword2" placeholder="Password" />
+                                          <input style="width: 80%;" type="password" class="form-control" id="InputPassword2" placeholder="Password" />
                                         </div>
+                                        </center>
                     <button type="button"  class="btn btn-primary btn-lg btn-block login-btn mb-2 mt-2" onclick="signup()" style="width:100%">Sign up</button>
                                         {% csrf_token %}
   </form>
@@ -107,9 +117,14 @@
             <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
             <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
             
+            {% if user.is_authentication %}
+                
+                {{ user.username }}
+              {% else %}
               <!--  login in -->
             <li class="nav-item cta"><button id = "click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span class="icon-user"></span  > Sign-In</button></li>
-            <li class="nav-item cta cta-colored"><button onclick="btnRegistorAction()"   class="nav-link"><span class="icon-pencil"></span> <S>  </S>ign-Up</button></li>
+            <li class="nav-item cta cta-colored"><button onclick="btnRegistorAction()"   class="nav-link"><span class="icon-pencil"></span> <S>  </S>Sign-Up</button></li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -135,8 +150,8 @@
     position: relative;
 }
 .avatar {
-    width: 200px;
-  height:200px;
+    width: 30%;
+  height: 30%;
     border-radius: 50%;
 }
 
@@ -156,7 +171,7 @@
 /* Modal Content Box */
 .loginmodal-content {
     background-color: #fefefe;
-    margin: 7% auto 15% auto;
+    margin: 10% auto 15% auto;
     border: 1px solid #888;
     width: 40%; 
   padding-bottom: 30px;
@@ -325,33 +340,7 @@ window.onclick = function(event) {
 }
 </script>
 <style >
-    @media (max-width: 991.98px) {
-    .loginmodal-content.animate {
-      width: 60%;
-      height:80%;
-    } 
-    }
-@media (max-width: 767.98px)
-{
-    .loginmodal-content.animate {
-      width: 90%;
-      height:90%;
-    } 
-}
-
-    @media (max-width: 991.98px) {
-    .registormodal-content.animate {
-      width: 60%;
-      height:80%;
-    } 
-    }
-@media (max-width: 767.98px)
-{
-    .registormodal-content.animate {
-      width: 90%;
-      height:90%;
-    } 
-}
+   
 
 </style>
 
