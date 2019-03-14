@@ -30,13 +30,68 @@
 
 
 
+
 <div id="login" class="modal">
-  <iframe class = 'loginmodal-content animate' src="/login/" width="50%" height="80%"></iframe>
+  <form class="loginmodal-content animate" action="/action_page.php">
+    <div class="form-group">
+                                          <label for="exampleInputUsername">Email</label>
+                                          <input type="email" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp" placeholder="Email">
+                                          <small id="emailHelp" class="form-text text-muted">Enter your registred E-mail ID</small>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label for="exampleInputPassword">Password</label>
+                                          <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password" />
+                                          <div id="errorlogin" style="color:red"></div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="userlogin()">Login</button>
+                                        
+  </form>
 </div>
 
+
+
 <div id="registor" class="modal">
-  <iframe class = 'registormodal-content animate' src="/registor/" width="50%" height="80%"></iframe>
+  <form class="registormodal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
+      <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
+      <h1 style="text-align:center">Welcome Price Aggregator</h1>
+    </div>
+<div class="form-group">
+        <div id="errorname" style="color:red">
+                                        </div>
+                                          <label for="InputFname">First Name</label>
+                                          <input type="text" class="form-control" id="InputFname" aria-describedby="emailHelp" placeholder="First Name">
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label for="InputLname">Last Name</label>
+                                          <input type="text" class="form-control" id="InputLname" aria-describedby="emailHelp" placeholder="Last Name">
+                                        </div>
+
+                                        <div class="form-group">
+                                        <div id="erroremail" style="color:red">
+                                        </div>
+                                          <label for="InputEmail">Email address</label>
+                                          <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                        <div id="errorpass" style="color:red">
+                                        </div>
+                                          <label for="Password1">Create Password</label>
+                                          <input type="password" class="form-control" id="Password1" placeholder="Password" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="InputPassword2">Confirm Password</label>
+                                          <input type="password" class="form-control" id="InputPassword2" placeholder="Password" />
+                                        </div>
+                    <button type="button"  class="btn btn-primary btn-lg btn-block login-btn mb-2 mt-2" onclick="signup()" style="width:100%">Sign up</button>
+                                        {% csrf_token %}
+  </form>
 </div>
+
 
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
@@ -152,9 +207,111 @@
         {document.getElementById('registor').style.display='block' ;
         $("#ftco-nav").collapse('hide');
       }
-</script>
+      
+
+      function signup(){
+            email = document.getElementById("InputEmail").value;
+            fname = document.getElementById("InputFname").value;
+            lname = document.getElementById("InputLname").value;
+            password1 = document.getElementById("Password1").value;
+            password2 = document.getElementById("InputPassword2").value;
+            csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+            $("#erroremail").html("");
+            $("#errorpass").html("");
+                        if(fname == "" || lname == ""){
+                $("#errorname").html("First Name and Last Name Required");
+            }
+
+      }
+
+
 
 </script>
+
+
+<script type="text/javascript">
+  
+    function userlogin(){
+        email = document.getElementById("exampleInputUsername").value;
+        password = document.getElementById("exampleInputPassword").value;
+        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        $("#errorlogin").html("");
+        $.ajax({
+            type:"POST",
+            url:'/login/',
+            data:{
+                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                'email':email,
+                'password':password,
+            },
+            success : function(data){
+                console.log(data);
+                if(data['message'] == "Success"){
+                    location.reload();
+                }
+                else if(data['message'] == "inactive"){
+                    $("#errorlogin").html("Please verify this E-mail address.");
+                }
+                else{
+                    $("#errorlogin").html("The E-mail and Password do not match.");
+                }
+            }
+        });
+    }
+
+</script>
+
+
+
+<script type="text/javascript">
+          function signup(){
+            alert('registor')
+            email = document.getElementById("InputEmail").value;
+            fname = document.getElementById("InputFname").value;
+            lname = document.getElementById("InputLname").value;
+            password1 = document.getElementById("Password1").value;
+            password2 = document.getElementById("InputPassword2").value;
+            csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+            $("#erroremail").html("");
+            $("#errorpass").html("");
+            if(fname == "" || lname == ""){
+                $("#errorname").html("First Name and Last Name Required");
+            }
+            else{
+            $.ajax({
+            type:"POST",
+            url:'/signup/',
+            data:{
+                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+              'first_name':fname,
+              'last_name':lname,
+              'email':email,
+              'password1':password1,
+              'password2':password2,
+            },
+            success : function(data){
+                console.log('11111111')
+                console.log(data);
+                if(data['message'] == "Success"){
+                    window.location = "/"
+                
+                }
+                
+                else{
+                    if("email" in data['message'])
+                        $("#erroremail").html(data['message']['email'][0]);
+                    if("password2" in data['message'])
+                        $("#errorpass").html(data['message']['password2'][0]);
+                }
+            }
+        })
+        }
+      }
+
+</script>
+
+
+
 <script>
 var login = document.getElementById('login');
 var registor = document.getElementById('registor');
@@ -213,8 +370,6 @@ window.onclick = function(event) {
   <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
   <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
-  <script src="{% static 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false' %}"></script>
-  <script src="{% static 'js/google-map.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
     
   </body>

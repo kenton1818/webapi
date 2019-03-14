@@ -4,6 +4,12 @@ import requests
 import re
 from collections import OrderedDict
 import xlwt
+
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse, HttpResponseRedirect
+import json
 from urllib.request import urlretrieve
 import os
 import random
@@ -14,15 +20,64 @@ import random
 from django.contrib import auth
 from django.urls import reverse
 print(os.listdir())
-from .forms import LoginForm
+from cover_page.forms import SignUpForm
 # Create your views here.
 
 
-def login (request):
-    return render(request,'login.html', {})
 
-def registor (request):
-    return render(request,'registor.html', {})
+def signup(request):
+    print('888')
+    #如果用戶己經登入
+    if request.user.is_authenticated:
+        return redirect('/')
+    if request.method == 'POST':
+        print('456')
+        fname = request.POST.get('first_name')
+        lname = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
+        form = SignUpForm(data = data)
+        if form.is_valid():
+            print('sssss')
+            user = form.save(commit=False)
+            user.is_active = True
+            user.save()
+            return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
+        else:
+            print('llllll')
+            return HttpResponse(json.dumps({"message":form.errors}),content_type="application/json")
+    else:
+        print('oooooo')
+        form = SignUpForm()
+    return HttpResponse(json.dumps({"message": "Denied"}),content_type="application/json")
+    # return render(request, 'registration/signup.html', {'form':form})
+
+def loginUser(request):
+    print('login')
+    email= request.POST.get('email')
+    password = request.POST.get('password')
+    # stayloggedin = request.GET.get('stayloggedin')
+    # if stayloggedin == "true":
+      #  pass
+    # else:
+      #  request.session.set_expiry(0)
+    user = authenticate(email=email, password=password)
+    if user is not None:
+        print('oooo')
+        if user.is_active:
+            print('ookoko')
+            login(request, user)
+            print('loinged')
+            return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
+        else:
+            print('kkkk')
+            return HttpResponse(json.dumps({"message": "inactive"}), content_type="application/json")
+    else:
+        return HttpResponse(json.dumps({"message": "invalid"}),content_type="application/json")
+    return HttpResponse(json.dumps({"message": "denied"}),content_type="application/json")
+
 
 '''
 def login(request):

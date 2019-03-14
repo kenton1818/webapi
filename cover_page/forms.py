@@ -1,15 +1,11 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import User
 
-class LoginForm(forms.Form):
-    usname = forms.CharField(label = 'username', required = True)
- #   email = forms.EmailField(label = 'email',required=True)
-    psw = forms.CharField(label = 'password', widget = forms.PasswordInput)
-'''    def clean(self):
-        username = self.cleaned_data['username']
-        password = self.cleaned_data['password']
 
-        user = authenticate(username = username , password = password)
-        if user is None:
-            raise forms.ValidationError('username or password not correct')
-        else:
-            self.cleaned_data['user'] = user'''
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+
+    class Meta:
+        model = User
+        fields = ( 'first_name', 'last_name', 'email', 'password1', 'password2', )
