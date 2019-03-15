@@ -49,31 +49,26 @@ class UserViewSet(viewsets.ModelViewSet):
         password2 = request.POST.get('password2')
         data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
         form = SignUpForm(data = data)
-        print('pppppppppppppppp')
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = True
             user.save()
             email = User.fun_raw_sql_query(email=email)
             serializer = UserSerializer(email, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({'status':'register success', 'message':serializer.data}, status=status.HTTP_200_OK)
         else:
-            return Response(form.errors, status=status.HTTP_404_NOT_FOUND)
+            return Response({'status':'register false', 'message':form.errors}, status=status.HTTP_200_OK)
     @list_route(methods=['post'])
     def login(self, request):
         email = request.POST.get('email', )
         password = request.POST.get('password', )
-        print(email)
-        print(password)
         user = authenticate(email=email, password=password)
-        print('user',user)
-        print('oho')
         if user is not None:
                 email = User.fun_raw_sql_query(email=email)
                 serializer = UserSerializer(email, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response({'status':'login success', 'message':serializer.data}, status=status.HTTP_200_OK)
         else:
-                return Response('no match any account', status=status.HTTP_404_NOT_FOUND)
+                return Response({'status':'login falas', 'message':'no match any account'}, status=status.HTTP_200_OK)
 
 
 
