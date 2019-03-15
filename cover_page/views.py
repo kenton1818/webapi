@@ -4,6 +4,9 @@ import requests
 import re
 from collections import OrderedDict
 import xlwt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
@@ -21,47 +24,21 @@ from django.contrib import auth
 from django.urls import reverse
 print(os.listdir())
 from cover_page.forms import SignUpForm
+from cover_page.models import User
+from cover_page.Serializers import employeeSerializer
 # Create your views here.
 
-def UserRegistrationsAPI(request):
-        get =request.GET
-        email = get.get('email')
-        password =get.get('password')
-        print(email)
-        print(password)
-        user = authenticate(email=email, password=password)
-        #帳號正確
-        if user is not None:
-            #帳號被凍結
-            if user.is_active:
-                d={ 'status': 0,
-                    'message': 'inactive'}
-                return JsonResponse(d)
-            else: 
-            #無凍結
-                d={ 'status': 1,
-                    'message': 'success'}
-                return JsonResponse(d)
-        #帳號不正確
-        else:
-            d={'status': 2,
-               'message': 'invalid'}
-            return JsonResponse(d)
-        #server 沒有回應
-        d={'status': 3,
-           'message': "denied"}
-        return JsonResponse(d)
+
+
+
+
 
 
 
 
 def signup(request):
-    print('888')
     #如果用戶己經登入
-    if request.user.is_authenticated:
-        return redirect('/')
     if request.method == 'POST':
-        print('456')
         fname = request.POST.get('first_name')
         lname = request.POST.get('last_name')
         email = request.POST.get('email')
@@ -69,48 +46,104 @@ def signup(request):
         password2 = request.POST.get('password2')
         data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
         form = SignUpForm(data = data)
+        print(form)
         if form.is_valid():
-            print('sssss')
             user = form.save(commit=False)
             user.is_active = True
             user.save()
             return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
         else:
-            print('llllll')
             return HttpResponse(json.dumps({"message":form.errors}),content_type="application/json")
     else:
-        print('oooooo')
-        form = SignUpForm()
-
-    return HttpResponse(json.dumps({"message": "Denied"}),content_type="application/json")
-    # return render(request, 'registration/signup.html', {'form':form})
-
-def loginUser(request):
-    print('login')
-    email= request.POST.get('email')
-    password = request.POST.get('password')
-    # stayloggedin = request.GET.get('stayloggedin')
-    # if stayloggedin == "true":
-      #  pass
-    # else:
-      #  request.session.set_expiry(0)
-    user = authenticate(email=email, password=password)
-    if user is not None:
-        print('oooo')
-        if user.is_active:
-            print('ookoko')
-            login(request, user)
-            print('loinged')
-            return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
+        fname = request.GET.get('first_name')
+        lname = request.GET.get('last_name')
+        email = request.GET.get('email')
+        password1 = request.GET.get('password1')
+        password2 = request.GET.get('password2')
+        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
+        form = SignUpForm(data = data)
+        print(data)
+        if form.is_valid():
+                user = form.save(commit=False)
+                user.is_active = True
+                user.save()
+                d={ 'status': 0,
+                    'message': 'Success'}
+                return JsonResponse(d)
+                
         else:
-            print('kkkk')
-            return HttpResponse(json.dumps({"message": "inactive"}), content_type="application/json")
-    else:
-        print('invalid')
-        return HttpResponse(json.dumps({"message": "invalid"}),content_type="application/json")
-    print('denied')
-    return HttpResponse(json.dumps({"message": "denied"}),content_type="application/json")
+                d={ 'status': 0,
+                    'message': 'inactive'}
+                    
+                return JsonResponse(d)
+        d={ 'status': 0,
+                'message': 'Denied'}
+                    
+        return JsonResponse(d)
+        # return render(request, 'registration/signup.html', {'form':form})
 
+def loginAPI(request):
+        print('login')
+        if request.method == 'POST':
+            email= request.POST.get('email')
+            password = request.POST.get('password')
+            # stayloggedin = request.GET.get('stayloggedin')
+            # if stayloggedin == "true":
+              #  pass
+            # else:
+              #  request.session.set_expiry(0)
+            print(email)
+            print(password)
+            user = authenticate(email=email, password=password)
+            print(user)
+            if user is not None:
+                print('oooo')
+                if user.is_active:
+                    print('ookoko')
+                    login(request, user)
+                    print('loinged')
+                    return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
+                else:
+                    print('kkkk')
+                    return HttpResponse(json.dumps({"message": "inactive"}), content_type="application/json")
+            else:
+                print('invalid')
+                return HttpResponse(json.dumps({"message": "invalid"}),content_type="application/json")
+            print('denied')
+            return HttpResponse(json.dumps({"message": "denied"}),content_type="application/json")
+        else:
+            get =request.GET
+            email = get.get('email')
+            password =get.get('password')
+            print(email)
+            print(password)
+            user = authenticate(email=email, password=password)
+            print(dir(user))
+            #帳號正確
+            try:
+                if user is not None:
+                #帳號被凍結
+                    if user.is_active:
+                        d={ 'status': 1,
+                            'message': 'success'}
+                        return JsonResponse(d)
+                    else: 
+                    #無凍結
+                        d={ 'status': 0,
+                            'message': 'inactive'}
+                        
+                        return JsonResponse(d)
+            #帳號不正確
+                else:
+                    d={'status': 2,
+                       'message': 'invalid'}
+                    return JsonResponse(d)
+                #server 沒有回應
+            except Exception as e:
+                d={'status': 3,
+                   'message': "denied",
+                    'reason': str(e)}
+                return JsonResponse(d)
 
 '''
 def login(request):

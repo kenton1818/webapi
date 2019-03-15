@@ -24,8 +24,6 @@ urlpatterns = [
     path('find_my_product/', views.find_my_product, name='find_my_product'),
     path('Search/', views.Web_scrawler, name='search'),
     path('signup/', views.signup, name='signup'),
-    path('login/', views.loginUser, name='login'),
-    path('UserRegistrationsAPI/', views.UserRegistrationsAPI, name='UserRegistrationsAPI'),
-    
+    path('login/', views.loginAPI, name='login'),
 
 ]
