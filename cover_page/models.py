@@ -21,6 +21,8 @@ class UserManager(BaseUserManager):
             raise ValueError('The given email must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
+        print('register')
+        print(user)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -54,3 +56,10 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+    def fun_raw_sql_query(**kwargs):
+        email = kwargs.get('email')
+        if email:
+            result = User.objects.raw('SELECT * FROM cover_page_user WHERE email = %s', [email])
+        else:
+            result = User.objects.raw('SELECT * FROM cover_page_user')
+        return result

@@ -13,6 +13,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 import json
+from rest_framework.decorators import list_route
 from urllib.request import urlretrieve
 import os
 import random
@@ -25,10 +26,54 @@ from django.urls import reverse
 print(os.listdir())
 from cover_page.forms import SignUpForm
 from cover_page.models import User
-from cover_page.Serializers import employeeSerializer
+from cover_page.serializers import UserSerializer
 # Create your views here.
 
+from rest_framework import viewsets
 
+
+# Create your views here.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    # /api/music/raw_sql_query/
+    
+    @list_route(methods=['post'])
+    def register(self, request):
+        #email = User.fun_raw_sql_query(email=email)
+        print('request',request)
+        fname = request.POST.get('first_name')
+        lname = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
+        form = SignUpForm(data = data)
+        print('pppppppppppppppp')
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = True
+            user.save()
+            email = User.fun_raw_sql_query(email=email)
+            serializer = UserSerializer(email, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(form.errors, status=status.HTTP_404_NOT_FOUND)
+    @list_route(methods=['post'])
+    def login(self, request):
+        email = request.POST.get('email', )
+        password = request.POST.get('password', )
+        print(email)
+        print(password)
+        user = authenticate(email=email, password=password)
+        print('user',user)
+        print('oho')
+        if user is not None:
+                email = User.fun_raw_sql_query(email=email)
+                serializer = UserSerializer(email, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+                return Response('no match any account', status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -46,9 +91,11 @@ def signup(request):
         password2 = request.POST.get('password2')
         data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
         form = SignUpForm(data = data)
-        print(form)
         if form.is_valid():
             user = form.save(commit=False)
+            
+            print('user',user)
+            print('form',form)
             user.is_active = True
             user.save()
             return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
@@ -62,9 +109,10 @@ def signup(request):
         password2 = request.GET.get('password2')
         data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
         form = SignUpForm(data = data)
-        print(data)
         if form.is_valid():
                 user = form.save(commit=False)
+                print('user',user)
+                print('form',form)
                 user.is_active = True
                 user.save()
                 d={ 'status': 0,
