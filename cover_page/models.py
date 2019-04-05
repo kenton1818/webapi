@@ -63,3 +63,17 @@ class User(AbstractUser):
         else:
             result = User.objects.raw('SELECT * FROM cover_page_user')
         return result
+class Product(models.Model):
+    
+    product_link = models.TextField()
+    product_image_link = models.TextField()
+    product_name = models.TextField()
+    product_price = models.TextField()
+    product_tag = models.TextField()
+    def del_recent_product(**kwargs):
+        Product.objects.all().delete()
+    def sql_all_recent_product(product_tag):
+            result = Product.objects.filter(product_tag = product_tag)
+            return result
+    class Meta:
+        db_table = "recent_product"
