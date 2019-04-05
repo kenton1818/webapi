@@ -665,8 +665,22 @@ class ProductViewSet(viewsets.ModelViewSet):
     
     product_link, product_image_link, product_name, product_price, product_tag = a()
     product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
-    print(product_info)
     for i in product_info:
         Product.objects.create(product_link=i[0], product_image_link=i[1],product_name=i[2],product_price=i[3],product_tag=i[4]) 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    
+    @list_route(methods=['post'])  
+    def recent_product(self, request):
+        Product.del_recent_product()
+        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
+        
+        product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
+        for i in product_info:
+            Product.objects.create(product_link=i[1], product_image_link=i[0],product_name=i[2],product_price=i[3],product_tag=i[4]) 
+        Dcfever_result = Product.sql_all_recent_product(product_tag = 'Dcfever')
+        Dcfever_serializer = ProductSerializer(Dcfever_result,many=True)
+        Carousell_result = Product.sql_all_recent_product(product_tag = 'Carousell')
+        Carousell_serializer = ProductSerializer(Carousell_result,many=True)
+        print('============')
+        return Response({'status':'success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)

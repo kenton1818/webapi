@@ -12,26 +12,54 @@ active
 
 
 
-
-
-
-<section class="home-slider owl-carousel">
-  {% for i in random_recommendation %}
-  <div class="slider-item" style="background-image:url({{ i | index:0 }});">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-md-end align-items-center justify-content-end">
-        <div class="col-md-6 text p-4 ftco-animate">
-          <h1 class="mb-3">{{ i | index:2 }}</h1>
-          <span class="location d-block mb-3"><i class="icon-my_location"></i> {{ i | index:-1 }}</span>
-          <p>''''''</p>
-          <span class="price">{{ i | index:3 }}</span>
-          <a href="{{ i | index:1 }}" class="btn-custom p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
+{% csrf_token %}
+<section class="home-slider owl-carousel" id = 'slider_three'>
+ 
+    <div class="slider-item0"  id="slider0">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text align-items-md-end align-items-center justify-content-end">
+            <div class="col-md-6 text p-4 ftco-animate">
+              <h1 class="mb-3_slider-item0"></h1>
+              <span class="location d-block mb-3"><i class="icon-my_location_slider-item0"></i> </span>
+              <hr>
+              <span class="price_slider-item0"></span>
+              <a href="" class="btn-custom0 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  {% endfor %}
+    
+    <div class="slider-item1"  id="slider0">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text align-items-md-end align-items-center justify-content-end">
+            <div class="col-md-6 text p-4 ftco-animate">
+              <h1 class="mb-3_slider-item1"></h1>
+              <span class="location d-block mb-3"><i class="icon-my_location_slider-item1"></i> </span>
+              <hr>
+              <span class="price_slider-item1"></span>
+              <a href="" class="btn-custom1 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slider-item2"  id="slider0">
+          <div class="overlay"></div>
+          <div class="container">
+            <div class="row no-gutters slider-text align-items-md-end align-items-center justify-content-end">
+              <div class="col-md-6 text p-4 ftco-animate">
+                <h1 class="mb-3_slider-item2"></h1>
+                <span class="location d-block mb-3"><i class="icon-my_location_slider-item2"></i> </span>
+                <hr>
+                <span class="price_slider-item2">13</span>
+                <a href="" class="btn-custom2 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+          
 </section>
 
 <section class="ftco-search">
@@ -205,5 +233,54 @@ active
 </section>
 
 
+
+{% endblock %}
+{% block script%} 
+
+
+<script type="text/javascript" >
+  console.log('dataload')
+  csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+  $.ajax({
+
+    type: "POST",
+    url: '/api/product/recent_product/',
+    data: {
+      'csrfmiddlewaretoken': csrfmiddlewaretoken,
+    },
+    success: function (data) {
+      console.log(data)
+      console.log('dataload')
+      if (data['status'] == "success") {
+        console.log(data)
+
+        for (var i in data['message']['Carousell']) {
+          if (i < 3) {
+            var currentId = '.slider-item'+i
+            var currentPrice = '.price_slider-item'+i
+            var currentname = '.mb-3_slider-item'+i
+            var currentlink = '.btn-custom'+i
+            var currentTag = 'icon-my_location_slider-item'+1
+            //var currentlink = '#slider_item'+i+'_link'
+            img = data['message']['Carousell'][i]['product_image_link'];
+            link = data['message']['Carousell'][i]['product_link'];
+            name = data['message']['Carousell'][i]['product_name'];
+            price = data['message']['Carousell'][i]['product_price'];
+            tag = data['message']['Carousell'][i]['product_tag'];
+            $(currentId).css("background-image", "url("+ img +")");
+            $(currentlink).attr("href",  link);
+            $(currentname).html(name);
+            $(currentPrice).html(price); 
+            $(currentTag).html(tag); 
+            console.log(link)
+            
+          }
+        }
+
+      }
+
+    }
+  });
+</script>
 
 {% endblock %}
