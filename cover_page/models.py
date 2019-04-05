@@ -63,3 +63,12 @@ class User(AbstractUser):
         else:
             result = User.objects.raw('SELECT * FROM cover_page_user')
         return result
+class Product(models.Model):
+    product_link = models.TextField()
+    product_image_link = models.TextField()
+    product_name = models.TextField()
+    product_price = models.TextField()
+    product_tag = models.TextField()
+    
+    class Meta:
+        db_table = "recent_product"

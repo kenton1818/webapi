@@ -21,6 +21,8 @@ from rest_framework.routers import DefaultRouter
 from cover_page import views
 router = DefaultRouter()
 router.register('user', views.UserViewSet)
+router.register('product', views.ProductViewSet)
+
 
 urlpatterns = [
     path ('' , include('cover_page.urls')),  
