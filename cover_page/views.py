@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from mongoengine import *
 import requests
 import re
+from django import db
 from collections import OrderedDict
 import xlwt
 from rest_framework.views import APIView
@@ -25,8 +26,8 @@ from django.contrib import auth
 from django.urls import reverse
 print(os.listdir())
 from cover_page.forms import SignUpForm
-from cover_page.models import User
-from cover_page.serializers import UserSerializer
+from cover_page.models import User , Product
+from cover_page.serializers import UserSerializer , ProductSerializer
 # Create your views here.
 
 from rest_framework import viewsets
@@ -60,20 +61,35 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({'status':'register false', 'message':form.errors}, status=status.HTTP_200_OK)
     @list_route(methods=['post'])
     def login(self, request):
-        email = request.POST.get('email', )
-        password = request.POST.get('password', )
+        email = request.POST.get('email',None )
+        password = request.POST.get('password', None )
+
         user = authenticate(email=email, password=password)
         if user is not None:
+            if user.is_active:
                 email = User.fun_raw_sql_query(email=email)
                 serializer = UserSerializer(email, many=True)
+                login(request, user)
                 return Response({'status':'login success', 'message':serializer.data}, status=status.HTTP_200_OK)
         else:
                 return Response({'status':'login falas', 'message':'no match any account'}, status=status.HTTP_200_OK)
 
-
-
-
-
+    @list_route(methods=['post'])
+    def recent_crawler(self, request):
+        dclink,dcurl , dcname, dcmoney, dctag = recent_crawler_dcfever()
+        calink,caproduct_links,caproduct_names,caproduct_moneys,catag = recent_crawler_carousell()
+        for i in caproduct_links:
+            dcurl.append(i)
+        for i in caproduct_names:
+            dcname.append(i)
+        for i in caproduct_moneys:
+            dcmoney.append(i)
+        for i in calink:
+            dclink.append(i)
+        for i in catag:
+            dctag.append(i)
+        return Response({'status':'success', 'message':""}, status=status.HTTP_200_OK)
+    
 
 
 def signup(request):
@@ -620,6 +636,9 @@ def recent_crawler_carousell():
             names.append(i[2])
             prices.append(i[3])
             tag.append('Carousell')
+        if len(images) == 0:
+            print('======================================')
+            images, urls, names, prices, tag = recent_crawler_carousell()
 
 
         return images, urls, names, prices, tag
@@ -638,3 +657,16 @@ def recent_crawler():
         dctag.append(i)
     return (dclink,dcurl , dcname, dcmoney,dctag)
 #print(crawler_carosell("iphone", 100,200, page = 3))
+
+class ProductViewSet(viewsets.ModelViewSet):
+    def a ():
+        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
+        return product_link, product_image_link, product_name, product_price, product_tag
+    
+    product_link, product_image_link, product_name, product_price, product_tag = a()
+    product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
+    print(product_info)
+    for i in product_info:
+        Product.objects.create(product_link=i[0], product_image_link=i[1],product_name=i[2],product_price=i[3],product_tag=i[4]) 
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
