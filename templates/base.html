@@ -1,88 +1,61 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>Price Aggregator -- Save Your Money</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<head>
-  <title>Price Aggregator -- Save Your Money</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
 
-  <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
 
-  <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
 
-  <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
 
-  <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
-
-  <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
-  <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
-
-
-  <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
-  <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  {% block cover_page_css%} {% endblock %}
-</head>
-
-<body>
+    
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block cover_page_css%} {% endblock %}
+  </head>
+  <body>
 
 
 
+<div id="login" class="modal">
+  <iframe class = 'modal-content animate' src="/login/" width="50%" height="80%"></iframe>
+</div>
 
 
-  <div id="login" class="modal">
-    <form class="loginmodal-content animate" action="/action_page.php">
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'cover_page'  %}">Price   <span>  Aggregator</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation" id = 'menu'>
+          <span class="oi oi-menu"></span> Menu
+        </button>
 
-      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
-        <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
-        <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
-        <h1 style="text-align:center;font-size: 23px;">Welcome Price Aggregator</h1>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
+            <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
+            
+              <!--  login in -->
+            <li class="nav-item cta"><button id = "click_login" onclick="btnAction()" class="nav-link ml-lg-2"><span class="icon-user"></span  > Sign-In</button></li>
+<li class="nav-item cta cta-colored"><button onclick="document.getElementById('register').style.display='block'"  class="nav-link"><span class="icon-pencil"></span> Sign-Up</button></li>
+          </ul>
+        </div>
       </div>
-      <center>
-        <div class="form-group">
-
-          <label for="exampleInputUsername">Email</label>
-          <input style="width: 80%;" type="email" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp"
-            placeholder="Email">
-          <small id="emailHelp" class="form-text text-muted">Enter your registred E-mail ID</small>
-        </div>
-        <div class="form-group">
-
-          <label for="exampleInputPassword">Password</label>
-          <input style="width: 80%;" type="password" name="password" class="form-control" id="exampleInputPassword"
-            placeholder="Password" />
-          <div id="errorlogin" style="color:red"></div>
-        </div>
-        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="userlogin()">Login</button>
-
-      </center>
-    </form>
-  </div>
-
-
-
-
-
-  <div id="operate_success" class="modal">
-    <div class='sucessmodal-content'>
-      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
-        <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
-        <img src="{% static '/images/operation_success_icon__406113.png' %}" alt="Avatar" class="avatar">
-        <h1 style="text-align:center;font-size: 23px;">Operation Success</h1>
-      </div>
-      <center>
-
-
-        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="btnOkAction()">OK</button>
-
-    </div>
-
-    </center>
-  </div>
+    </nav>
+    <!-- END nav -->
 
 
 
@@ -90,121 +63,21 @@
 
 
 
+     {% block body%} {% endblock %}
+  
+
+<style >
 
 
-
-
-
-
-
-
-  <div id="registor" class="modal">
-    <form class="registormodal-content animate" action="/action_page.php">
-
-      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
-        <span onclick="document.getElementById('registor').style.display='none'" class="close" title="Close PopUp">&times;</span>
-        <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
-        <h1 style="text-align:center;font-size: 23px;">Welcome Price Aggregator</h1>
-      </div>
-      <center>
-        <div class="form-group">
-          <div id="errorname" style="color:red">
-          </div>
-          <label for="InputFname">First Name</label>
-          <input style="width: 50%;" type="text" class="form-control" id="InputFname" aria-describedby="emailHelp"
-            placeholder="First Name">
-        </div>
-
-        <div class="form-group">
-          <label for="InputLname">Last Name</label>
-          <input style="width: 50%;" type="text" class="form-control" id="InputLname" aria-describedby="emailHelp"
-            placeholder="Last Name">
-        </div>
-
-        <div class="form-group">
-          <div id="erroremail" style="color:red">
-          </div>
-          <label for="InputEmail">Email address</label>
-          <input style="width: 80%;" type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
-            placeholder="Enter email">
-        </div>
-
-        <div class="form-group">
-          <div id="errorpass" style="color:red">
-          </div>
-          <label for="Password1">Create Password</label>
-          <input style="width: 80%;" type="password" class="form-control" id="Password1" placeholder="Password" />
-        </div>
-        <div class="form-group">
-          <label for="InputPassword2">Confirm Password</label>
-          <input style="width: 80%;" type="password" class="form-control" id="InputPassword2" placeholder="Password" />
-        </div>
-      </center>
-      <button type="button" class="btn btn-primary btn-lg btn-block login-btn mb-2 mt-2" onclick="signup()" style="width:100%">Sign
-        up</button>
-      {% csrf_token %}
-    </form>
-  </div>
-
-
-
-  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-    <div class="container">
-      <a class="navbar-brand" href="{% url 'cover_page'  %}">Price <span> Aggregator</span></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav"
-        aria-expanded="false" aria-label="Toggle navigation" id='menu'>
-        <span class="oi oi-menu"></span> Menu
-      </button>
-
-      <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto" id='home_bar'>
-          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
-          <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
-
-          {% if user.is_authenticated %}
-
-          <li class="nav-item cta" id='id_loginblock'><button id="click_login" onclick="" class="nav-link ml-lg-2"><span
-                class="icon-user"></span> {{ user}}</button></li>
-
-
-          {% else %}
-          <!--  login in -->
-
-          <li class="nav-item cta" id='id_loginblock'><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span
-                class="icon-user"></span> Sign-In</button></li>
-          <li class="nav-item cta cta-colored" id='id_regisblock'><button onclick="btnRegistorAction()" class="nav-link"><span
-                class="icon-pencil"></span> <S> </S>Sign-Up</button></li>
-
-          {% endif %}
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- END nav -->
-
-
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px" display="block">
-      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
-
-
-
-
-
-  {% block body%} {% endblock %}
-
-
-  <style>
-    /* Center the image and position the close button */
+/* Center the image and position the close button */
 .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
     position: relative;
 }
 .avatar {
-    width: 30%;
-  height: 30%;
+    width: 200px;
+  height:200px;
     border-radius: 50%;
 }
 
@@ -222,26 +95,7 @@
 }
 
 /* Modal Content Box */
-.loginmodal-content {
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
-
-}
-
-/* Modal Content Box */
-.sucessmodal-content {
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
-
-}
-/* Modal Content Box */
-.registormodal-content {
+.modal-content {
     background-color: #fefefe;
     margin: 7% auto 15% auto;
     border: 1px solid #888;
@@ -275,199 +129,46 @@
 }
 </style>
 
-  <!-- 當用戶點下login時自動宿回negbar -->
-  <script>
-    function btnLoginAction() {
-      document.getElementById('login').style.display = 'block';
-      $("#ftco-nav").collapse('hide');
-    }
+<!-- 當用戶點下login時自動宿回negbar -->
 
-    function btnRegistorAction() {
-      document.getElementById('registor').style.display = 'block';
-      $("#ftco-nav").collapse('hide');
-    }
-
-    function btnSuccessAction() {
-      document.getElementById('operate_success').style.display = 'block';
-      $("#ftco-nav").collapse('hide');
-    }
-
-    function btnOkAction() {
-      var status = document.getElementById('operate_success');
-      status.style.display = "none";
-
-    }
-  </script>
-  <!--用戶登入-->
-  <script type="text/javascript">
-    function userlogin() {
-      email = document.getElementById("exampleInputUsername").value;
-      password = document.getElementById("exampleInputPassword").value;
-      if (email == '') {
-        $("#errorlogin").html("Please enter E-mail address.");
-      } else if (password == '') {
-        $("#errorlogin").html("Please enter Password.");
-      } else {
-        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-        $("#errorlogin").html("");
-        $.ajax({
-          type: "POST",
-          url: '/api/user/login/',
-          data: {
-            'csrfmiddlewaretoken': csrfmiddlewaretoken,
-            'email': email,
-            'password': password,
-          },
-
-          success: function (data) {
-
-            console.log(data);
-            if (data['status'] == "login success") {
-
-              var registor = document.getElementById('id_regisblock')
-              var login = document.getElementById('click_login')
-              login.style.display = "none"
-              registor.style.display = "none"
-              var login_popup = document.getElementById('login');
-              login_popup.style.display = "none"
-              user_logined =
-                ' <li class="nav-item cta"  id = "id_loginblock"><button id = "click_login" onclick="" class="nav-link ml-lg-2"><span class="icon-user"></span  >' +
-                email + '</button></li>'
-              $("#home_bar").append(user_logined)
-              btnSuccessAction()
-
-
-
-            } else if (data['message'] == "error email") {
-              $("#errorlogin").html("Please enter E-mail address.");
-            } else if (data['message'] == "error password") {
-              $("#errorlogin").html("Please enter password.");
-            } else {
-              $("#errorlogin").html("The E-mail and Password do not match.");
-            }
-          }
-        });
+<script >
+        function btnAction()
+        {document.getElementById('login').style.display='block' ;
+        $("#ftco-nav").collapse('hide');
       }
-    }
-  </script>
+</script>
 
-
-  <!--用戶注冊-->
-  <script type="text/javascript">
-    function signup() {
-      email = document.getElementById("InputEmail").value;
-      fname = document.getElementById("InputFname").value;
-      lname = document.getElementById("InputLname").value;
-      password1 = document.getElementById("Password1").value;
-      password2 = document.getElementById("InputPassword2").value;
-      csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-      $("#erroremail").html("");
-      $("#errorpass").html("");
-      if (fname == "" || lname == "") {
-        $("#errorname").html("First Name and Last Name Required");
-      } else {
-
-        $.ajax({
-            type: "POST",
-            url: '/api/user/register/',
-            data: {
-              'csrfmiddlewaretoken': csrfmiddlewaretoken,
-              'first_name': fname,
-              'last_name': lname,
-              'email': email,
-              'password1': password1,
-              'password2': password2,
-            },
-            success: function (data) {
-              if (data['status'] == "register success") {
-                var registor = document.getElementById('registor');
-                registor.style.display = "none";
-                $.ajax({
-          type: "POST",
-          url: '/api/user/login/',
-          data: {
-            'csrfmiddlewaretoken': csrfmiddlewaretoken,
-            'email': email,
-            'password': password1,
-          },
-
-          success: function (data) {
-
-            console.log(data);
-            if (data['status'] == "login success") {
-
-              var registor = document.getElementById('id_regisblock')
-              var login = document.getElementById('click_login')
-              login.style.display = "none"
-              registor.style.display = "none"
-              var login_popup = document.getElementById('login');
-              login_popup.style.display = "none"
-              a =
-                ' <li class="nav-item cta"  id = "id_loginblock"><button id = "click_login" onclick="" class="nav-link ml-lg-2"><span class="icon-user"></span  >' +
-                email + '</button></li>'
-              $("#home_bar").append(a)
-              btnSuccessAction()
-
-
-
-            } else if (data['message'] == "error email") {
-              $("#errorlogin").html("Please enter E-mail address.");
-            } else if (data['message'] == "error password") {
-              $("#errorlogin").html("Please enter password.");
-            } else {
-              $("#errorlogin").html("The E-mail and Password do not match.");
-            }
-          }
-        });
-
-
-
-
-
-
-
-                  }
-                  else {
-                    if ("email" in data['message'])
-                      $("#erroremail").html(data['message']['email'][0]);
-                    if ("password2" in data['message'])
-                      $("#errorpass").html(data['message']['password2'][0]);
-                    if ("password1" in data['message'])
-                      $("#errorpass").html(data['message']['password1'][0]);
-                  }
-                }
-              })
-          }
-        }
-  </script>
-
-
-  <!--當用戶點視窗外就把popup screen close-->
-  <script>
-    var login = document.getElementById('login');
-
-    var registor = document.getElementById('registor');
-    var status = document.getElementById('operate_success');
-
-    window.onclick = function (event) {
-      if (event.target == login) {
+</script>
+<script>
+var login = document.getElementById('login');
+var register = document.getElementById('register');
+window.onclick = function(event) {
+    if (event.target == login) {
         login.style.display = "none";
-      }
-      if (event.target == registor) {
-        registor.style.display = "none";
-      }
-      if (event.target == status) {
-        status.style.display = "none";
-      }
     }
-  </script>
-  <style>
+      if (event.target == register) {
+        register.style.display = "none";
+    }
+}
+</script>
+<style >
+    @media (max-width: 991.98px) {
+    .modal-content.animate {
+      width: 60%;
+      height:80%;
+    } 
+    }
+@media (max-width: 767.98px)
+{
+    .modal-content.animate {
+      width: 90%;
+      height:90%;
+    } 
+}
 
+</style>
 
-  </style>
-
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
   <script src="{% static 'js/popper.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -481,8 +182,9 @@
   <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
   <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
+  <script src="{% static 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false' %}"></script>
+  <script src="{% static 'js/google-map.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
-  {% block script%} {% endblock %}
-</body>
-
+    
+  </body>
 </html>
