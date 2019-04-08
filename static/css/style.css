@@ -7639,7 +7639,7 @@ h1, h2, h3, h4, h5,
           line-height: 1.5;
           font-weight: 400;
           color: rgba(0, 0, 0, 0.6); }
-        .owl-carousel.home-slider .slider-item0 .slider-text span.location {
+        .owl-carousel.home-slider .slider-item0 .slider-text span.location_slider-item0 {
           color: rgba(0, 0, 0, 0.5); }
         .owl-carousel.home-slider .slider-item0 .slider-text span.price_slider-item0 {
           color: #f05d23;
@@ -7701,7 +7701,7 @@ h1, h2, h3, h4, h5,
                     line-height: 1.5;
                     font-weight: 400;
                     color: rgba(0, 0, 0, 0.6); }
-                  .owl-carousel.home-slider .slider-item1 .slider-text span.location {
+                  .owl-carousel.home-slider .slider-item1 .slider-text span.location_slider-item1 {
                     color: rgba(0, 0, 0, 0.5); }
                   .owl-carousel.home-slider .slider-item1 .slider-text span.price_slider-item1 {
                     color: #f05d23;
@@ -7763,7 +7763,7 @@ h1, h2, h3, h4, h5,
                               line-height: 1.5;
                               font-weight: 400;
                               color: rgba(0, 0, 0, 0.6); }
-                            .owl-carousel.home-slider .slider-item2 .slider-text span.location {
+                            .owl-carousel.home-slider .slider-item2 .slider-text span.location_slider-item2 {
                               color: rgba(0, 0, 0, 0.5); }
                             .owl-carousel.home-slider .slider-item2 .slider-text span.price_slider-item2 {
                               color: #f05d23;

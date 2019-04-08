@@ -14,14 +14,17 @@ active
 
 {% csrf_token %}
 <section class="home-slider owl-carousel" id = 'slider_three'>
- 
-    <div class="slider-item0"  id="slider0">
+
+    
+    
+    <div class="slider-item0"  id="slider0" style="background-image:url(https://1.bp.blogspot.com/-yIhXlQfYN1E/WMksG192LLI/AAAAAAAAA9w/txsqdQfykVksDEFshayeN54c0Gu6C3AAwCLcB/s1600/glow.gif);"   >
+        
         <div class="overlay"></div>
         <div class="container">
           <div class="row no-gutters slider-text align-items-md-end align-items-center justify-content-end">
             <div class="col-md-6 text p-4 ftco-animate">
               <h1 class="mb-3_slider-item0"></h1>
-              <span class="location d-block mb-3"><i class="icon-my_location_slider-item0"></i> </span>
+              <span class="location_slider-item0 d-block mb-3"><i class="icon-my_location"></i>  </span>
               <hr>
               <span class="price_slider-item0"></span>
               <a href="" class="btn-custom0 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
@@ -30,30 +33,31 @@ active
         </div>
       </div>
     
-    <div class="slider-item1"  id="slider0">
+    <div class="slider-item1"  id="slider0" style="background-image:url(https://1.bp.blogspot.com/-yIhXlQfYN1E/WMksG192LLI/AAAAAAAAA9w/txsqdQfykVksDEFshayeN54c0Gu6C3AAwCLcB/s1600/glow.gif);" >
         <div class="overlay"></div>
         <div class="container">
           <div class="row no-gutters slider-text align-items-md-end align-items-center justify-content-end">
             <div class="col-md-6 text p-4 ftco-animate">
               <h1 class="mb-3_slider-item1"></h1>
-              <span class="location d-block mb-3"><i class="icon-my_location_slider-item1"></i> </span>
+              <span class="location_slider-item1 d-block mb-3"><i class="icon-my_location"></i> </span>
               <hr>
               <span class="price_slider-item1"></span>
-              <a href="" class="btn-custom1 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
+              <a href="" class="btn-custom1 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span> </a>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="slider-item2"  id="slider0">
+      <div class="slider-item2"  id="slider0" style="background-image:url(https://1.bp.blogspot.com/-yIhXlQfYN1E/WMksG192LLI/AAAAAAAAA9w/txsqdQfykVksDEFshayeN54c0Gu6C3AAwCLcB/s1600/glow.gif);" >
+          
           <div class="overlay"></div>
           <div class="container">
             <div class="row no-gutters slider-text align-items-md-end align-items-center justify-content-end">
               <div class="col-md-6 text p-4 ftco-animate">
                 <h1 class="mb-3_slider-item2"></h1>
-                <span class="location d-block mb-3"><i class="icon-my_location_slider-item2"></i> </span>
+                <span class="location_slider-item2 d-block mb-3"><i class="icon-my_location_slider-item2"></i> </span>
                 <hr>
-                <span class="price_slider-item2">13</span>
+                <span class="price_slider-item2"></span>
                 <a href="" class="btn-custom2 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
               </div>
             </div>
@@ -260,7 +264,7 @@ active
             var currentPrice = '.price_slider-item'+i
             var currentname = '.mb-3_slider-item'+i
             var currentlink = '.btn-custom'+i
-            var currentTag = 'icon-my_location_slider-item'+1
+            var currentTag = '.location_slider-item'+i
             //var currentlink = '#slider_item'+i+'_link'
             img = data['message']['Carousell'][i]['product_image_link'];
             link = data['message']['Carousell'][i]['product_link'];
@@ -270,10 +274,11 @@ active
             $(currentId).css("background-image", "url("+ img +")");
             $(currentlink).attr("href",  link);
             $(currentname).html(name);
+            $('.loadingdiv').css("display", "none");
             $(currentPrice).html(price); 
-            $(currentTag).html(tag); 
-            console.log(link)
-            
+            $(currentTag).append('<i class="icon-my_location"></i>')
+            $(currentTag).html('<i class="icon-my_location"></i> '+tag); 
+
           }
         }
 
