@@ -15,19 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls import url, include
-from django.contrib import admin
-from rest_framework.routers import DefaultRouter
-from cover_page import views
-router = DefaultRouter()
-router.register('user', views.UserViewSet)
-router.register('product', views.ProductViewSet)
-
 
 urlpatterns = [
     path ('' , include('cover_page.urls')),  
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path ('' , include('cover_page.urls')),
     
 ]
-    

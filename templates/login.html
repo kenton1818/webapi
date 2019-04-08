@@ -88,6 +88,9 @@ button:hover {
 
 /* Add Zoom Animation */
 
+
+
+
 </style>
 <script>
 function closeWin()   // Tested Code
@@ -99,72 +102,25 @@ someIframe.parentNode.removeChild(window.parent.document.getElementById('iframe_
 </script>
 
   <form action="">
+        
     <div class="imgcontainer">
+      
       <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
       <h1 class='title' style="text-align:center">Welcome Price Aggregator</h1>
     </div>
+
     <div class="container">
       <input type="text" placeholder="Enter Username" name="uname">
       <input type="password" placeholder="Enter Password" name="psw">        
       <button type="submit">Login</button>
+      
       <input type="checkbox" style="margin:26px 30px;"> Remember me      
       <a href="#" style="text-decoration:none; float:right; margin-right:34px; margin-top:26px;">Forgot Password ?</a>
     </div>
     
   </form>
 
-<!--
-<div id="snackbar">Some text some message..</div>
-<script>
-  var x = document.getElementById("snackbar");
-  x.className = "show";
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 
-</script>
-<style>
-#snackbar {
-  visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  bottom: 30px;
-  font-size: 17px;
-}
-
-#snackbar.show {
-  visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@-webkit-keyframes fadein {
-  from {bottom: 0; opacity: 0;} 
-  to {bottom: 30px; opacity: 1;}
-}
-
-@keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
-}
-
-@-webkit-keyframes fadeout {
-  from {bottom: 30px; opacity: 1;} 
-  to {bottom: 0; opacity: 0;}
-}
-
-@keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
-</style>
--->
 </body>
 </html>
 
