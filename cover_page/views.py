@@ -2,8 +2,20 @@ from django.shortcuts import redirect, render
 from mongoengine import *
 import requests
 import re
+from django import db
+from django.contrib.auth import logout
 from collections import OrderedDict
 import xlwt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import JsonResponse
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse, HttpResponseRedirect
+import json
+from rest_framework.decorators import list_route
 from urllib.request import urlretrieve
 import os
 import random
@@ -14,12 +26,188 @@ import random
 from django.contrib import auth
 from django.urls import reverse
 print(os.listdir())
-from .forms import LoginForm
+from cover_page.forms import SignUpForm
+from cover_page.models import User , Product
+from cover_page.serializers import UserSerializer , ProductSerializer
 # Create your views here.
 
+from rest_framework import viewsets
 
-def login (request):
-    return render(request,'login.html', {})
+
+# Create your views here.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    # /api/music/raw_sql_query/
+    @list_route(methods=['post'])
+    def logout(self, request, ):
+        # simply delete the token to force a login
+        logout(request)
+        return Response({'status':'logout success', 'message':""}, status=status.HTTP_200_OK)
+    @list_route(methods=['post'])
+    def register(self, request):
+        #email = User.fun_raw_sql_query(email=email)
+        print('request',request)
+        fname = request.POST.get('first_name')
+        lname = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
+        form = SignUpForm(data = data)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = True
+            user.save()
+            email = User.fun_raw_sql_query(email=email)
+            serializer = UserSerializer(email, many=True)
+            return Response({'status':'register success', 'message':serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status':'register false', 'message':form.errors}, status=status.HTTP_200_OK)
+    @list_route(methods=['post'])
+    def login(self, request):
+        email = request.POST.get('email',None )
+        password = request.POST.get('password', None )
+
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            if user.is_active:
+                email = User.fun_raw_sql_query(email=email)
+                serializer = UserSerializer(email, many=True)
+                login(request, user)
+                return Response({'status':'login success', 'message':serializer.data}, status=status.HTTP_200_OK)
+        else:
+                return Response({'status':'login falas', 'message':'no match any account'}, status=status.HTTP_200_OK)
+
+    @list_route(methods=['post'])
+    def recent_crawler(self, request):
+        dclink,dcurl , dcname, dcmoney, dctag = recent_crawler_dcfever()
+        calink,caproduct_links,caproduct_names,caproduct_moneys,catag = recent_crawler_carousell()
+        for i in caproduct_links:
+            dcurl.append(i)
+        for i in caproduct_names:
+            dcname.append(i)
+        for i in caproduct_moneys:
+            dcmoney.append(i)
+        for i in calink:
+            dclink.append(i)
+        for i in catag:
+            dctag.append(i)
+        return Response({'status':'success', 'message':""}, status=status.HTTP_200_OK)
+    
+
+
+def signup(request):
+    #如果用戶己經登入
+    if request.method == 'POST':
+        fname = request.POST.get('first_name')
+        lname = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
+        form = SignUpForm(data = data)
+        if form.is_valid():
+            user = form.save(commit=False)
+            
+            print('user',user)
+            print('form',form)
+            user.is_active = True
+            user.save()
+            return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({"message":form.errors}),content_type="application/json")
+    else:
+        fname = request.GET.get('first_name')
+        lname = request.GET.get('last_name')
+        email = request.GET.get('email')
+        password1 = request.GET.get('password1')
+        password2 = request.GET.get('password2')
+        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
+        form = SignUpForm(data = data)
+        if form.is_valid():
+                user = form.save(commit=False)
+                print('user',user)
+                print('form',form)
+                user.is_active = True
+                user.save()
+                d={ 'status': 0,
+                    'message': 'Success'}
+                return JsonResponse(d)
+                
+        else:
+                d={ 'status': 0,
+                    'message': 'inactive'}
+                    
+                return JsonResponse(d)
+        d={ 'status': 0,
+                'message': 'Denied'}
+                    
+        return JsonResponse(d)
+        # return render(request, 'registration/signup.html', {'form':form})
+
+def loginAPI(request):
+        print('login')
+        if request.method == 'POST':
+            email= request.POST.get('email')
+            password = request.POST.get('password')
+            # stayloggedin = request.GET.get('stayloggedin')
+            # if stayloggedin == "true":
+              #  pass
+            # else:
+              #  request.session.set_expiry(0)
+            print(email)
+            print(password)
+            user = authenticate(email=email, password=password)
+            print(user)
+            if user is not None:
+                print('oooo')
+                if user.is_active:
+                    print('ookoko')
+                    login(request, user)
+                    print('loinged')
+                    return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
+                else:
+                    print('kkkk')
+                    return HttpResponse(json.dumps({"message": "inactive"}), content_type="application/json")
+            else:
+                print('invalid')
+                return HttpResponse(json.dumps({"message": "invalid"}),content_type="application/json")
+            print('denied')
+            return HttpResponse(json.dumps({"message": "denied"}),content_type="application/json")
+        else:
+            get =request.GET
+            email = get.get('email')
+            password =get.get('password')
+            print(email)
+            print(password)
+            user = authenticate(email=email, password=password)
+            print(dir(user))
+            #帳號正確
+            try:
+                if user is not None:
+                #帳號被凍結
+                    if user.is_active:
+                        d={ 'status': 1,
+                            'message': 'success'}
+                        return JsonResponse(d)
+                    else: 
+                    #無凍結
+                        d={ 'status': 0,
+                            'message': 'inactive'}
+                        
+                        return JsonResponse(d)
+            #帳號不正確
+                else:
+                    d={'status': 2,
+                       'message': 'invalid'}
+                    return JsonResponse(d)
+                #server 沒有回應
+            except Exception as e:
+                d={'status': 3,
+                   'message': "denied",
+                    'reason': str(e)}
+                return JsonResponse(d)
 
 '''
 def login(request):
@@ -65,19 +253,9 @@ def login(request):
             return reden(request, 'error,html', {'message' : 'not correct'})'''
 
 def Cover_page(request):
-    time.sleep(4)
-    images, urls, names, prices, tags = recent_crawler()
-    product_datas = [i for i in zip(images,urls,names,prices,tags)]
-    context = {}
-    a = [i for i in product_datas if i[-1] == 'Carousell'] 
-    a = random.sample(a,3)
-    product_datas = random.sample(product_datas,len(product_datas)) 
-    context['random_recommendation'] = a
-    context['product_datas'] = product_datas
-    context["no_picture"] = "/images/s.gif"
-    context['length'] = len(tags)
-    context['user'] = request.user
-    return render(request,'index.html', context)
+    
+
+    return render(request,'index.html', {})
 
 def Web_scrawler(request):
     request.encoding='utf-8'
@@ -452,6 +630,9 @@ def recent_crawler_carousell():
             names.append(i[2])
             prices.append(i[3])
             tag.append('Carousell')
+        if len(images) == 0:
+            print('======================================')
+            images, urls, names, prices, tag = recent_crawler_carousell()
 
 
         return images, urls, names, prices, tag
@@ -470,3 +651,30 @@ def recent_crawler():
         dctag.append(i)
     return (dclink,dcurl , dcname, dcmoney,dctag)
 #print(crawler_carosell("iphone", 100,200, page = 3))
+
+class ProductViewSet(viewsets.ModelViewSet):
+    def a ():
+        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
+        return product_link, product_image_link, product_name, product_price, product_tag
+    
+    product_link, product_image_link, product_name, product_price, product_tag = a()
+    product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
+    for i in product_info:
+        Product.objects.create(product_link=i[0], product_image_link=i[1],product_name=i[2],product_price=i[3],product_tag=i[4]) 
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    
+    @list_route(methods=['post'])  
+    def recent_product(self, request):
+        Product.del_recent_product()
+        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
+        
+        product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
+        for i in product_info:
+            Product.objects.create(product_link=i[1], product_image_link=i[0],product_name=i[2],product_price=i[3],product_tag=i[4]) 
+        Dcfever_result = Product.sql_all_recent_product(product_tag = 'Dcfever')
+        Dcfever_serializer = ProductSerializer(Dcfever_result,many=True)
+        Carousell_result = Product.sql_all_recent_product(product_tag = 'Carousell')
+        Carousell_serializer = ProductSerializer(Carousell_result,many=True)
+        print('============')
+        return Response({'status':'success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)
