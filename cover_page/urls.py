@@ -23,7 +23,7 @@ urlpatterns = [
     path('', views.Cover_page , name = 'cover_page'),
     path('find_my_product/', views.find_my_product, name='find_my_product'),
     path('Search/', views.Web_scrawler, name='search'),
-    path('login/', views.login, name='login'),
-    
+    path('signup/', views.signup, name='signup'),
+    path('login/', views.loginAPI, name='login'),
 
 ]
