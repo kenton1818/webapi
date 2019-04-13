@@ -1,61 +1,192 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Price Aggregator -- Save Your Money</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+<head>
 
-    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+  {% csrf_token %}
+  <title>Price Aggregator -- Save Your Money</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/animate.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
-    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
 
-    
-    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
-    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {% block cover_page_css%} {% endblock %}
-  </head>
-  <body>
+  <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
 
 
+  <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block cover_page_css%} {% endblock %}
+</head>
 
-<div id="login" class="modal">
-  <iframe class = 'modal-content animate' src="/login/" width="50%" height="67%"></iframe>
-</div>
+<body>
 
 
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-      <div class="container">
-        <a class="navbar-brand" href="{% url 'cover_page'  %}">Price   <span>  Aggregator</span></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="oi oi-menu"></span> Menu
-        </button>
+  <div id="update" class="modal">
+    <div class="form-style-8 updateinfomodal-content animate">
+      <form class=''>
+        <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+          <span onclick="document.getElementById('registor').style.display='none'" class="close" title="Close PopUp">&times;</span>
+          <h2>Update your Info</h2>
+        </div>
+        <center>
+          <div class="form-group">
+            <div id="errorname" style="color:red">
+            </div>
+            <label for="InputFname">First Name</label>
+            <input style="width: 50%;" type="text" class="form-control form_FN" id="form_FN" aria-describedby="emailHelp"
+              placeholder="First Name" value="">
+          </div>
+          <div class="form-group">
+            <label for="InputLname">Last Name</label>
+            <input style="width: 50%;" type="text" class="form-control form_LN" id="form_LN" aria-describedby="emailHelp"
+              placeholder="Last Name" value="">
+          </div>
+          <div class="form-group">
+            <div id="erroremail" style="color:red">
+            </div>
+            <label for="InputEmail">Email address</label>
+            <input style="width: 80%;" type="email" class="form-control form_Email" id="form_Email" aria-describedby="emailHelp"
+              placeholder="Enter email" value="">
+          </div>
+          <div class="form-group">
+            <div id="errorexistpass" style="color:red">
+            </div>
 
-        <div class="collapse navbar-collapse" id="ftco-nav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
-            <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
-            
-              <!--  login in -->
-            <li class="nav-item cta"><button onclick="document.getElementById('login').style.display='block'" class="nav-link ml-lg-2"><span class="icon-user"></span  > Sign-In</button></li>
-<li class="nav-item cta cta-colored"><button onclick="document.getElementById('register').style.display='block'"  class="nav-link"><span class="icon-pencil"></span> Sign-Up</button></li>
+            <label for="existing_Password"> Your Existing Password</label>
+            <input style="width: 80%;" type="password" class="form-control form_password_now" id="form_password_now"
+              placeholder="Password" value="" />
+          </div>
+
+          <div class="form-group">
+            <div id="errorpass" style="color:red">
+            </div>
+            <label for="Password1"> New Password</label>
+            <input style="width: 80%;" type="password" class="form-control form_password1" id="form_password1"
+              placeholder="Password" value="" />
+          </div>
+          <div class="form-group">
+
+            <div id="errorpass" style="color:red"></div>
+
+            <label for="InputPassword2">Confirm New Password</label>
+            <input style="width: 80%;" type="password" class="form-control form_password2" id="form_password2"
+              placeholder="Password" value="" />
+          </div>
+        </center>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn mb-2 mt-2" onclick="btnSubmitInfo()"
+          style="width:100%   ;      background: #4D4D4D;	text-transform: uppercase; 	font-family: 'Open Sans Condensed', sans-serif;
+	color: #FFFFFF;">
+          Update</button>
+
+      </form>
+    </div>
+  </div>
+
+
+
+  <div id="login" class="modal">
+    <form class="loginmodal-content animate" action="/action_page.php">
+      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+        <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
+        <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
+        <h1 style="text-align:center;font-size: 23px;">Welcome Price Aggregator</h1>
+      </div>
+      <center>
+        <div class="form-group">
+          <label for="exampleInputUsername">Email</label>
+          <input style="width: 80%;" type="email" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp"
+            placeholder="Email">
+          <small id="emailHelp" class="form-text text-muted">Enter your registred E-mail ID</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword">Password</label>
+          <input style="width: 80%;" type="password" name="password" class="form-control" id="exampleInputPassword"
+            placeholder="Password" />
+          <div id="errorlogin" style="color:red"></div>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="userlogin()">Login</button>
+      </center>
+    </form>
+  </div>
+
+
+
+
+
+
+
+  <div id="operate_success" class="modal">
+    <div class='loginmodal-content animate'>
+      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+        <span onclick="document.getElementById('operate_success').style.display='none'" class="close" title="Close PopUp">&times;</span>
+        <img src="{% static '/images/operation_success_icon__406113.png' %}" alt="Avatar" class="avatar">
+        <h1 style="text-align:center;font-size: 23px;">Operation Success</h1>
+      </div>
+      <center>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="btnOkAction()">OK</button>
+    </div>
+    </center>
+  </div>
+
+  <div id="operate_success2" class="modal">
+    <div class='loginmodal-content animate'>
+      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+        <span onClick="window.location.reload()" class="close" title="Close PopUp">&times;</span>
+        <img src="{% static '/images/operation_success_icon__406113.png' %}" alt="Avatar" class="avatar">
+        <h1 style="text-align:center;font-size: 23px;">Operation Success</h1>
+      </div>
+      <center>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="window.location.reload()">OK</button>
+    </div>
+    </center>
+  </div>
+
+
+
+  <div id="UserInfo" class="modal" style="display:none">
+    <span onclick="document.getElementById('UserInfo').style.display='none'" class="close" title="Close PopUp">&times;</span>
+    <div id="vcard">
+      <div id="card-content">
+        <div id="profile">
+          <span class="avatar">
+            <span class="typicons-user icon"></span>
+            <div><span class="info_name"></span></div>
+
+            <br />
+            <div><span class="info_email"></span></div>
+
+          </span>
+          </span>
+        </div>
+        <div id="options">
+          <ul>
+            <li><button class='btnUpdateInfo' onclick="btnUpdateUserInfo()" style="background-color: #109fd1; border:0px ;     display: contents;color: white;
+              "><span
+                  class="typicons-write icon"></span>Update Info</button></li>
+            <li><button class='btnFavourite' style="background-color: #109fd1; border:0px ;     display: contents;color: white;
+            "><span
+                  class="typicons-heart icon"></span>
+                My Favourite</button></li>
+            <li><button class='btnDelAcc' style="background-color: #109fd1; border:0px ;     display: contents;color: white;
+              "><span
+                  class="typicons-delete icon"></span>Delete Account</button></li>
           </ul>
         </div>
       </div>
-    </nav>
-    <!-- END nav -->
+    </div>
+  </div>
 
 
 
@@ -63,35 +194,125 @@
 
 
 
-     {% block body%} {% endblock %}
-  
-<script>
-// If user clicks anywhere outside of the modal, Modal will close
-
-var login = document.getElementById('login');
-var register = document.getElementById('register');
-window.onclick = function(event) {
-    if (event.target == login) {
-        login.style.display = "none";
-    }
-      if (event.target == register) {
-        register.style.display = "none";
-    }
-}
-
-</script>
-<style >
 
 
-/* Center the image and position the close button */
+
+
+
+
+
+
+  <div id="registor" class="modal">
+    <form class="registormodal-content animate" action="/action_page.php">
+      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+        <span onclick="document.getElementById('registor').style.display='none'" class="close" title="Close PopUp">&times;</span>
+        <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
+        <h1 style="text-align:center;font-size: 23px;">Welcome Price Aggregator</h1>
+      </div>
+      <center>
+        <div class="form-group">
+          <div id="errorname" style="color:red">
+          </div>
+          <label for="InputFname">First Name</label>
+          <input style="width: 50%;" type="text" class="form-control" id="InputFname" aria-describedby="emailHelp"
+            placeholder="First Name">
+        </div>
+        <div class="form-group">
+          <label for="InputLname">Last Name</label>
+          <input style="width: 50%;" type="text" class="form-control" id="InputLname" aria-describedby="emailHelp"
+            placeholder="Last Name">
+        </div>
+
+
+        <div class="form-group">
+          <div id="erroremail" style="color:red">
+          </div>
+          <label for="InputEmail">Email address</label>
+          <input style="width: 80%;" type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
+            placeholder="Enter email">
+        </div>
+
+
+        <div class="form-group">
+          <div id="errorpass" style="color:red">
+          </div>
+          <label for="Password1">Create Password</label>
+          <input style="width: 80%;" type="password" class="form-control" id="Password1" placeholder="Password" />
+        </div>
+        <div class="form-group">
+          <label for="InputPassword2">Confirm Password</label>
+          <input style="width: 80%;" type="password" class="form-control" id="InputPassword2" placeholder="Password" />
+        </div>
+      </center>
+      <button type="button" class="btn btn-primary btn-lg btn-block login-btn mb-2 mt-2" onclick="signup()" style="width:100%">Sign
+        up</button>
+
+    </form>
+  </div>
+
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'cover_page'  %}">Price <span> Aggregator</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav"
+        aria-expanded="false" aria-label="Toggle navigation" id='menu'>
+        <span class="oi oi-menu"></span> Menu
+      </button>
+
+      <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto" id='home_bar'>
+          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
+          <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
+
+          {% if user.is_authenticated %}
+
+          <li class="nav-item cta" id='id_loginedblock'><button id="user_status" onclick="btnUserInfo()" class="nav-link ml-lg-2"><span></span>
+              {{ user}}</button></li>
+
+          <li class="nav-item cta cta-colored"><button id='user_logout' onclick="btnLogout()" class="nav-link">
+              <span></span> <S> </S>Logout
+            </button></li>
+
+
+          {% else %}
+          <!--  login in -->
+
+          <li class="nav-item cta" id='id_loginblock'><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span></span>
+              Sign-In</button></li>
+          <li class="nav-item cta cta-colored"><button id='id_regisblock' onclick="btnRegistorAction()" class="nav-link"><span></span>
+              <S> </S>Sign-Up</button></li>
+
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- END nav -->
+
+
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px" display="block">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
+
+
+
+
+
+  {% block body%} {% endblock %}
+
+
+  <style>
+    /* Center the image and position the close button */
 .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
     position: relative;
 }
 .avatar {
-    width: 200px;
-  height:200px;
+    width: 30%;
+  height: 30%;
     border-radius: 50%;
 }
 
@@ -109,9 +330,45 @@ window.onclick = function(event) {
 }
 
 /* Modal Content Box */
-.modal-content {
+.loginmodal-content {
     background-color: #fefefe;
-    margin: 13% auto 15% auto;
+    margin: 10% auto 15% auto;
+    border: 1px solid #888;
+    width: 40%; 
+  padding-bottom: 30px;
+
+}
+
+/* Modal Content Box */
+.sucessmodal-content {
+    background-color: #fefefe;
+    margin: 10% auto 15% auto;
+    border: 1px solid #888;
+    width: 40%; 
+  padding-bottom: 30px;
+
+}
+/* Modal Content Box */
+.userInfo-content {
+    background-color: #fefefe;
+    margin: 10% auto 15% auto;
+    border: 1px solid #888;
+    width: 40%; 
+  padding-bottom: 30px;
+
+}
+/* Modal Content Box */
+.registormodal-content {
+    background-color: #fefefe;
+    margin: 7% auto 15% auto;
+    border: 1px solid #888;
+    width: 40%; 
+  padding-bottom: 30px;
+
+} /* Modal Content Box */
+.updateinfomodal-content {
+    background-color: #fefefe;
+    margin: 7% auto 15% auto;
     border: 1px solid #888;
     width: 40%; 
   padding-bottom: 30px;
@@ -143,11 +400,710 @@ window.onclick = function(event) {
 }
 </style>
 
+  <!-- 當用戶點下login時自動宿回negbar -->
+  <script>
+    function btnLoginAction() {
+      document.getElementById('login').style.display = 'block';
+      $("#ftco-nav").collapse('hide');
+    }
 
-  <script src="{% static 'js/jquery.min.js' %}"></script>
+
+
+    function btnRegistorAction() {
+      document.getElementById('registor').style.display = 'block';
+      $("#ftco-nav").collapse('hide');
+    }
+
+    function btnSuccessAction() {
+      document.getElementById('operate_success').style.display = 'block';
+    }
+
+    function btnSuccessAction2() {
+      document.getElementById('operate_success2').style.display = 'block';
+    }
+
+    function btnOkAction() {
+      var status = document.getElementById('operate_success');
+      status.style.display = "none";
+
+    }
+  </script>
+
+  <!--SubmitUserInfo-->
+
+  <script>
+    function btnSubmitInfo() {
+      var csrftoken = getCookie('csrftoken');
+      email = document.getElementById("form_Email").value;
+      fname = document.getElementById("form_FN").value;
+      lname = document.getElementById("form_LN").value;
+      exis_pw = document.getElementById("form_password_now").value;
+
+      password1 = document.getElementById("form_password1").value;
+      password2 = document.getElementById("form_password2").value;
+
+      $.ajax({
+        type: "POST",
+        url: '/api/user/UpdateInfo/',
+        data: {
+          'csrfmiddlewaretoken': csrftoken,
+          'existing_pw': exis_pw,
+          'first_name': fname,
+          'last_name': lname,
+          'email': email,
+          'password1': password1,
+          'password2': password2,
+        },
+
+        success: function (data) {
+          console.log(data)
+          if (data['status'] == "password falas") {
+            $("#errorexistpass").html("existing password is not match");
+          }
+          if (data['status'] == "password comfirm false") {
+            $("#errorpass").html(data['message']);
+          }
+          if (data['message']["password2"]) {
+            $("#errorpass").html(data['message']['password2'][0]);
+          }
+          if (data['message']["password1"]) {
+            $("#errorpass").html(data['message']['password1'][0]);
+          }
+          if (data['status'] == 'update success'){
+
+            var status = document.getElementById('user_status')
+            var logout = document.getElementById('user_logout')
+            $("#user_status").html("Sign-In");
+            $("#user_status").attr("onclick", "btnLoginAction()");
+            $("#user_status").attr("id", "click_login");
+            $("#icon1").toggleClass('icon-user');
+            $("#user_logout").html("Sign-Up");
+            $("#user_logout").attr("onclick", "btnRegistorAction()");
+            $("#user_logout").attr("id", "id_regisblock");
+            var info_popup = document.getElementById('update');
+            info_popup.style.display = "none"
+            btnSuccessAction()
+          }
+          
+          //btnSuccessAction2()
+        }
+      });
+    }
+  </script>
+
+
+  <!--UpdateUserInfo-->
+
+  <script>
+    function btnUpdateUserInfo() {
+      var csrftoken = getCookie('csrftoken');
+      $.ajax({
+        type: "POST",
+        url: '/api/user/UserInfo/',
+        data: {
+          'csrfmiddlewaretoken': csrftoken,
+        },
+
+        success: function (data) {
+
+          console.log(data);
+          if (data['status'] == "info success") {
+            console.log('===========================')
+            console.log(data['message']['UserEmail'])
+            $(".form_FN").attr('value', data['message']['UserFirstName']);
+            $(".form_LN").attr('value', data['message']['UserLastName']);
+            $(".form_Email").attr('value', data['message']['UserEmail']);
+            document.getElementById('update').style.display = 'block';
+            var info_popup = document.getElementById('UserInfo');
+            info_popup.style.display = "none"
+          }
+
+        }
+      });
+    }
+  </script>
+  <!--UserInfo-->
+  <script>
+    function btnUserInfo() {
+      var csrftoken = getCookie('csrftoken');
+      $.ajax({
+        type: "POST",
+        url: '/api/user/UserInfo/',
+        data: {
+          'csrfmiddlewaretoken': csrftoken,
+
+        },
+
+        success: function (data) {
+
+          console.log(data);
+          if (data['status'] == "info success") {
+            console.log('===========================')
+            console.log(data['message']['UserEmail'])
+            $(".info_name").html(data['message']['UserFirstName'] + '  ' + data['message']['UserLastName']);
+            $(".info_email").html(data['message']['UserEmail']);
+            var info_popup = document.getElementById('UserInfo');
+            info_popup.style.display = "block"
+            $("#ftco-nav").collapse('hide');
+          }
+
+        }
+      });
+    }
+  </script>
+
+  <!--用戶登出-->
+  <script type="text/javascript">
+    function btnLogout() {
+      var csrftoken = getCookie('csrftoken');
+      $.ajax({
+        type: "POST",
+        url: '/api/user/logout/',
+        data: {
+          'csrfmiddlewaretoken': csrftoken,
+        },
+
+        success: function (data) {
+
+          console.log(data);
+          if (data['status'] == "logout success") {
+
+            var status = document.getElementById('user_status')
+            var logout = document.getElementById('user_logout')
+            $("#user_status").html("Sign-In");
+            $("#user_status").attr("onclick", "btnLoginAction()");
+            $("#user_status").attr("id", "click_login");
+            $("#icon1").toggleClass('icon-user');
+            $("#user_logout").html("Sign-Up");
+            $("#user_logout").attr("onclick", "btnRegistorAction()");
+            $("#user_logout").attr("id", "id_regisblock");
+            var info_popup = document.getElementById('UserInfo');
+            info_popup.style.display = "none"
+
+            /*  user_login =
+              '<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
+              user_signin =
+                '<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
+              $("#home_bar").append(user_login)
+              $("#home_bar").append(user_signin)*/
+
+            btnSuccessAction()
+
+
+
+          }
+
+        }
+      });
+    }
+  </script>
+
+  <!--用戶登入-->
+  <script type="text/javascript">
+    function userlogin() {
+      var csrftoken = getCookie('csrftoken');
+      email = document.getElementById("exampleInputUsername").value;
+      password = document.getElementById("exampleInputPassword").value;
+      if (email == '') {
+        $("#errorlogin").html("Please enter E-mail address.");
+      } else if (password == '') {
+        $("#errorlogin").html("Please enter Password.");
+      } else {
+        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        $("#errorlogin").html("");
+        $.ajax({
+          type: "POST",
+          url: '/api/user/login/',
+          data: {
+            'csrfmiddlewaretoken': csrftoken,
+            'email': email,
+            'password': password,
+          },
+
+          success: function (data) {
+
+            console.log(data);
+            if (data['status'] == "login success") {
+
+              var registor = document.getElementById('id_regisblock')
+              var login = document.getElementById('click_login')
+              $("#click_login").html(email);
+              $("#click_login").attr("onclick", "btnUserInfo()");
+              $("#click_login").attr("id", "user_status");
+              $("#id_regisblock").html("Logout");
+              $("#id_regisblock").attr("onclick", "btnLogout()");
+              $("#id_regisblock").attr("id", "user_logout");
+              var login_popup = document.getElementById('login');
+              login_popup.style.display = "none"
+
+              btnSuccessAction()
+
+
+
+            } else if (data['message'] == "error email") {
+              $("#errorlogin").html("Please enter E-mail address.");
+            } else if (data['message'] == "error password") {
+              $("#errorlogin").html("Please enter password.");
+            } else {
+              $("#errorlogin").html("The E-mail and Password do not match.");
+            }
+          }
+        });
+      }
+    }
+  </script>
+
+
+  <!--用戶注冊-->
+  <script type="text/javascript">
+    function signup() {
+      email = document.getElementById("InputEmail").value;
+      fname = document.getElementById("InputFname").value;
+      lname = document.getElementById("InputLname").value;
+      password1 = document.getElementById("Password1").value;
+      password2 = document.getElementById("InputPassword2").value;
+      csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+      $("#erroremail").html("");
+      $("#errorpass").html("");
+      if (fname == "" || lname == "") {
+        $("#errorname").html("First Name and Last Name Required");
+      } else {
+
+        $.ajax({
+          type: "POST",
+          url: '/api/user/register/',
+          data: {
+            'csrfmiddlewaretoken': csrfmiddlewaretoken,
+            'first_name': fname,
+            'last_name': lname,
+            'email': email,
+            'password1': password1,
+            'password2': password2,
+          },
+          success: function (data) {
+            if (data['status'] == "register success") {
+              var registor = document.getElementById('registor');
+              registor.style.display = "none";
+              $.ajax({
+                type: "POST",
+                url: '/api/user/login/',
+                data: {
+                  'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                  'email': email,
+                  'password': password1,
+                },
+
+                success: function (data) {
+
+                  console.log(data);
+                  if (data['status'] == "login success") {
+
+                    var registor = document.getElementById('id_regisblock')
+                    var login = document.getElementById('click_login')
+                    $("#click_login").html(email);
+                    $("#click_login").attr("onclick", "btnUserInfo()");
+                    $("#click_login").attr("id", "user_status");
+                    $("#id_regisblock").html("Logout");
+                    $("#id_regisblock").attr("onclick", "btnLogout()");
+                    $("#id_regisblock").attr("id", "user_logout");
+                    var login_popup = document.getElementById('login');
+                    login_popup.style.display = "none"
+
+                    btnSuccessAction()
+
+
+
+                  } else if (data['message'] == "error email") {
+                    $("#errorlogin").html("Please enter E-mail address.");
+                  } else if (data['message'] == "error password") {
+                    $("#errorlogin").html("Please enter password.");
+                  } else {
+                    $("#errorlogin").html("The E-mail and Password do not match.");
+                  }
+                }
+              });
+
+
+
+
+
+
+
+            } else {
+              if ("email" in data['message'])
+                $("#erroremail").html(data['message']['email'][0]);
+              if ("password2" in data['message'])
+                $("#errorpass").html(data['message']['password2'][0]);
+              if ("password1" in data['message'])
+                $("#errorpass").html(data['message']['password1'][0]);
+            }
+          }
+        })
+      }
+    }
+  </script>
+
+
+  <!--當用戶點視窗外就把popup screen close-->
+  <script>
+    var login = document.getElementById('login');
+
+    var registor = document.getElementById('registor');
+    var status = document.getElementById('operate_success');
+    var UserInfo = document.getElementById('UserInfo');
+    var update = document.getElementById('update');
+
+    var status2 = document.getElementById('operate_success2');
+    window.onclick = function (event) {
+      if (event.target == login) {
+        login.style.display = "none";
+      }
+      if (event.target == update) {
+        update.style.display = "none";
+      }
+      if (event.target == UserInfo) {
+        UserInfo.style.display = "none";
+      }
+      if (event.target == registor) {
+        registor.style.display = "none";
+      }
+      if (event.target == status2) {
+        location.reload();
+      }
+    }
+  </script>
+  <style>
+    @import url(http://weloveiconfonts.com/api/?family=typicons);
+    @import url(https://fonts.googleapis.com/css?family=Exo:500,700);
+
+    /* typicons */
+    [class*="typicons-"]:before {
+      font-family: 'Typicons', sans-serif;
+    }
+
+    #vcard {
+      margin: 0 auto;
+      width: 450px;
+      height: 281px;
+      background: #109fd1;
+      border-radius: 4px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, .3);
+      margin: 15% auto auto auto
+    }
+
+    #card-content {
+      width: 100%;
+      float: left;
+      height: 100%;
+
+    }
+
+    #side-bar {
+      width: 100px;
+      float: left;
+      background: #fff;
+      height: 100%;
+      border-radius: 0 4px 4px 0;
+      box-shadow: -5px 0px 15px rgba(0, 0, 0, .3);
+    }
+
+    #options ul {
+      margin: auto auto auto auto;
+    }
+
+    #options ul li {
+      text-align: center;
+      font-family: Exo;
+      font-size: 14px;
+      color: white;
+      list-style-type: none;
+      display: inline-block;
+      float: left;
+      width: 123px;
+      height: 100px;
+      border-right: solid 1px rgba(255, 255, 255, .2);
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+    }
+
+    @media (max-width: 800.98px) {
+      #vcard {
+        margin: 0 auto;
+        width: 369px;
+        height: 281px;
+        background: #109fd1;
+        border-radius: 4px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, .3);
+        margin: 15% auto auto auto
+      }
+
+      #options ul li {
+        text-align: center;
+        font-family: Exo;
+        font-size: 14px;
+        color: white;
+        list-style-type: none;
+        display: inline-block;
+        float: left;
+        width: 100px;
+        height: 100px;
+        border-right: solid 1px rgba(255, 255, 255, .2);
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+      }
+      
+    }
+
+    @media (max-width: 450.98px) {
+      #vcard {
+        margin: 0 auto;
+        width: 305px;
+        height: 281px;
+        background: #109fd1;
+        border-radius: 4px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, .3);
+        margin: 35% auto auto auto
+      }
+
+      #options ul li {
+        text-align: center;
+        font-family: Exo;
+        font-size: 14px;
+        color: white;
+        list-style-type: none;
+        display: inline-block;
+        float: left;
+        width: 79px;
+        height: 100px;
+        border-right: solid 1px rgba(255, 255, 255, .2);
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+      }
+      
+    }
+
+    #options ul li:last-child {
+
+      border-right: none;
+    }
+
+    #options ul li span.icon {
+      display: block;
+      margin-top: 25px;
+      color: white;
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    #side-bar ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    #side-bar ul li {
+
+      text-align: center;
+      font-family: Exo;
+      font-size: 12px;
+      color: #414141;
+      list-style-type: none;
+      display: inline-block;
+      float: left;
+      width: 100px;
+      height: 115px;
+      border-bottom: solid 1px #eaeaea;
+
+    }
+
+    #side-bar ul li:last-child {
+
+      border-bottom: none;
+    }
+
+    #side-bar ul li span.icon {
+      display: block;
+      margin-top: 25px;
+      color: #414141;
+      font-size: 36px;
+      line-height: 32px;
+    }
+
+    #profile {
+      padding-top: 7px;
+      text-align: center;
+      overflow: auto;
+    }
+
+    span.avatar span.icon {
+      display: inline-block;
+      color: #414141;
+      font-size: 72px;
+      line-height: 100px;
+      background: #46af7b;
+      border: solid 3px rgba(255, 255, 255, .2);
+      overflow: hidden;
+      padding-top: 1px;
+      width: 90px;
+      height: 90px;
+      border-radius: 46px;
+    }
+
+    span.info_name {
+      line-height: 0%;
+      display: block;
+      font-family: Exo;
+      font-size: 18px;
+      color: rgba(255, 255, 255, .7);
+      font-weight: normal;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+    }
+
+    span.info_email {
+      padding-top: 10px;
+      display: block;
+      font-family: Exo;
+      font-size: 18px;
+      color: rgba(255, 255, 255, .7);
+      font-weight: normal;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+    }
+  </style>
+
+  <script type="text/javascript">
+    //auto expand textarea
+    function adjust_textarea(h) {
+      h.style.height = "20px";
+      h.style.height = (h.scrollHeight) + "px";
+    }
+  </script>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <style type="text/css">
+    .form-style-8 {
+      font-family: 'Open Sans Condensed', arial, sans;
+      width: 500px;
+      padding: 30px;
+      background: #FFFFFF;
+      margin: 100px auto;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+      -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+      -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+
+    }    @media (max-width: 550.98px) {
+
+.form-style-8 {
+font-family: 'Open Sans Condensed', arial, sans;
+width: 100%;
+height: 100%;
+padding: 30px;
+background: #FFFFFF;
+margin: 66px auto;
+box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+
+}
+
+}
+@media (max-width: 350.98px) {
+
+.form-style-8 {
+font-family: 'Open Sans Condensed', arial, sans;
+width: 100%;
+height: 100%;
+padding: 30px;
+background: #FFFFFF;
+margin: 104px auto;
+box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+
+}
+
+}
+
+
+    .form-style-8 h2 {
+      background: #4D4D4D;
+      text-transform: uppercase;
+      font-family: 'Open Sans Condensed', sans-serif;
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: 100;
+      padding: 20px;
+      margin: -55px -31px 31px -31px;
+    }
+    @media (max-width: 450.98px) {
+
+      .form-style-8 h2 {
+    background: #4D4D4D;
+    text-transform: uppercase;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 100;
+    padding: 20px;
+    margin: -55px -31px 31px -31px;
+}
+    }
+    
+    .form-style-8 input[type="text"],
+    .form-style-8 input[type="date"],
+    .form-style-8 input[type="datetime"],
+    .form-style-8 input[type="email"],
+    .form-style-8 input[type="number"],
+    .form-style-8 input[type="search"],
+    .form-style-8 input[type="time"],
+    .form-style-8 input[type="url"],
+    .form-style-8 input[type="password"],
+    .form-style-8 textarea,
+    .form-style-8 select {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      outline: none;
+      display: block;
+      width: 100%;
+      padding: 7px;
+      border: none;
+      border-bottom: 1px solid #ddd;
+      background: transparent;
+      margin-bottom: 10px;
+      font: 16px Arial, Helvetica, sans-serif;
+      height: 45px;
+    }
+
+    .form-style-8 textarea {
+      resize: none;
+      overflow: hidden;
+    }
+
+    .form-style-8 input[type="button"],
+    .form-style-8 input[type="submit"] {
+      -moz-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+      -webkit-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+      box-shadow: inset 0px 1px 0px 0px #45D6D6;
+      background-color: #2CBBBB;
+      border: 1px solid #27A0A0;
+      display: inline-block;
+      cursor: pointer;
+      color: #FFFFFF;
+      font-family: 'Open Sans Condensed', sans-serif;
+      font-size: 14px;
+      padding: 8px 18px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .form-style-8 input[type="button"]:hover,
+    .form-style-8 input[type="submit"]:hover {
+      background: linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
+      background-color: #34CACA;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/csrf.js' %}"></script>
   <script src="{% static 'js/popper.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="https://stackpath.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></script>
   <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
   <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
   <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
@@ -158,9 +1114,8 @@ window.onclick = function(event) {
   <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
   <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
-  <script src="{% static 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false' %}"></script>
-  <script src="{% static 'js/google-map.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
-    
-  </body>
+  {% block script%} {% endblock %}
+</body>
+
 </html>
