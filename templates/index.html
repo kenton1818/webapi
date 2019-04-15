@@ -247,7 +247,7 @@ active
   csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
   $.ajax({
 
-    type: "POST",
+    type: "GET",
     url: '/api/product/recent_product/',
     data: {
       'csrfmiddlewaretoken': csrfmiddlewaretoken,

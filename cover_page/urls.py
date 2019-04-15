@@ -25,5 +25,6 @@ urlpatterns = [
     path('Search/', views.Web_scrawler, name='search'),
     path('signup/', views.signup, name='signup'),
     path('login/', views.loginAPI, name='login'),
+    
 
 ]
