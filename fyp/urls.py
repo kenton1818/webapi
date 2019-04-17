@@ -23,6 +23,7 @@ router = DefaultRouter()
 router.register('user', views.UserViewSet)
 router.register('product', views.ProductViewSet)
 
+
 urlpatterns = [
     path ('' , include('cover_page.urls')),  
     path('admin/', admin.site.urls),

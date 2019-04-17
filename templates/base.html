@@ -613,115 +613,17 @@
     function btnUserDel() {
       var csrftoken = getCookie('csrftoken');
       $.ajax({
-        type: "PUT",
+        type: "POST",
         url: '/api/user/del_user/',
-        data: { },
-        beforeSend:function(xhr){
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-        },
-
-        success: function (data) {
-
-          console.log(data);
-          if (data['status'] == "delete success") {
-            console.log(data['status'] );
-            var status = document.getElementById('user_status')
-            var logout = document.getElementById('user_logout')
-            $("#user_status").html("Sign-In");
-            $("#user_status").attr("onclick", "btnLoginAction()");
-            $("#user_status").attr("id", "click_login");
-            $("#icon1").toggleClass('icon-user');
-            $("#user_logout").html("Sign-Up");
-            $("#user_logout").attr("onclick", "btnRegistorAction()");
-            $("#user_logout").attr("id", "id_regisblock");
-            var confirm_popup = document.getElementById('confirm_popup');
-            confirm_popup.style.display = "none"
-            $("#ftco-nav").collapse('hide');
-
-            /*  user_login =
-              '<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
-              user_signin =
-                '<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
-              $("#home_bar").append(user_login)
-              $("#home_bar").append(user_signin)*/
-
-            btnSuccessAction()
-        }
-
-
-        }
-      });
-    }
-  </script>
-  <!--UserInfo-->
-  <script>
-    function btnUserInfo() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "POST",
-        url: '/api/user/UserInfo/',
-        data: {
-          'csrfmiddlewaretoken': csrftoken,
-
-        },
-
-        success: function (data) {
-
-          console.log(data);
-          if (data['status'] == "info success") {
-            console.log('===========================')
-            console.log(data['message']['UserEmail'])
-            $(".info_name").html(data['message']['UserFirstName'] + '  ' + data['message']['UserLastName']);
-            $(".info_email").html(data['message']['UserEmail']);
-            var info_popup = document.getElementById('UserInfo');
-            info_popup.style.display = "block"
-            $("#ftco-nav").collapse('hide');
-          }
-
-        }
-      });
-    }
-  </script>
-
-  <!--用戶登出-->
-  <script type="text/javascript">
-    function btnLogout() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "POST",
-        url: '/api/user/logout/',
         data: {
           'csrfmiddlewaretoken': csrftoken,
         },
 
         success: function (data) {
 
-          console.log(data['status'] );
-          if (data['status'] == "logout success") {
-            console.log(data['status'] );
-            var status = document.getElementById('user_status')
-            var logout = document.getElementById('user_logout')
-            $("#user_status").html("Sign-In");
-            $("#user_status").attr("onclick", "btnLoginAction()");
-            $("#user_status").attr("id", "click_login");
-            $("#icon1").toggleClass('icon-user');
-            $("#user_logout").html("Sign-Up");
-            $("#user_logout").attr("onclick", "btnRegistorAction()");
-            $("#user_logout").attr("id", "id_regisblock");
-            var info_popup = document.getElementById('UserInfo');
-            info_popup.style.display = "none"
-            $("#ftco-nav").collapse('hide');
-
-            /*  user_login =
-              '<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
-              user_signin =
-                '<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
-              $("#home_bar").append(user_login)
-              $("#home_bar").append(user_signin)*/
-
-            btnSuccessAction()
+          console.log(data);
         }
-      }})
+      });
     }
   </script>
 
