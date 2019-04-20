@@ -9,9 +9,8 @@
 
 
 
-from django.http import JsonResponse
-from rest_framework.renderers import JSONRenderer
-from rest_framework.response import Response                            
+
+
 from django.shortcuts import redirect, render
 from mongoengine import *
 import requests
@@ -20,7 +19,6 @@ from django import db
 from django.contrib.auth import logout
 from collections import OrderedDict
 import xlwt
-import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -53,17 +51,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     # /api/music/raw_sql_query/
-    @list_route(methods=["PUT"],)
-    def del_user(self,request):    
-        try:
-            u = User.objects.get(email = request.user.email)
-            u.delete()
-            return Response({'status':'delete success','message':""}, status=status.HTTP_200_OK)
-        
-        except:
-            return Response({'status':'delete false','message':"The user not found"}, status=status.HTTP_204_NO_CONTENT)
-            
-
     @list_route(methods=["POST"],)
     def UserInfo(self, request):
         user = request.user
@@ -118,8 +105,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 return Response({'status':'login success', 'message':serializer.data}, status=status.HTTP_200_OK)
         else:
                 return Response({'status':'login falas', 'message':'no match any account'}, status=status.HTTP_200_OK)
-    
-    
+
     @list_route(methods=['post'])
     def UpdateInfo(self, request):
         fname = request.POST.get('first_name')
@@ -314,14 +300,13 @@ def Web_scrawler(request):
     request.encoding='utf-8'
     #if  request.GET:
     #    keyword = request.GET.get('keyword', None)
-    keyword = request.GET.get('keyword', "")
-    seach_type = request.GET.get('seach_type', "")
-    minarea = request.GET.get('minarea', "")
-    maxarea = request.GET.get('maxarea', "")
+    keyword = request.GET.get('keyword', None)
+    seach_type = request.GET.get('seach_type', None)
+    minarea = request.GET.get('minarea', None)
+    maxarea = request.GET.get('maxarea', None)
     print('seach_type',seach_type)
     links,url , name, money, date = Search_start(keyword,  minarea, maxarea,seach_type,)
     context = {}
-    index = [i for i in range(0,len(links))]
     context["url"] = url
     context["product_links"] = links
     context["name"] = name
@@ -331,22 +316,7 @@ def Web_scrawler(request):
     context["length"] = range(0,len(url))
     context["total"] = len(url)
     context["no_picture"] = "/images/s.gif"
-    contexts = []
-    for i in range(0,len(url)):
-        context = {"url":url[i],"name":name[i],"product_links":links[i],"product_price":money[i],"date":date[i]}
-        contexts.append(context)
-    data = zip(contexts)
-    response = Response(
-            {"status":'search success',"message":{"search_keyword":keyword,"result":data}},
-            content_type="application/json",
-            status=status.HTTP_200_OK,
-        )
-    response.accepted_renderer = JSONRenderer()
-    response.accepted_media_type = "application/json"
-    response.renderer_context = {}
-    return response
-    #data = {"status":'search success',"message":{"search_keyword":keyword,"result":data}}
-    #return Response(data)
+    return render(request,"keyword_result.html", context)
 
 def find_my_product(request):
     images, urls, names, prices, tags = recent_crawler()
@@ -356,7 +326,7 @@ def find_my_product(request):
     context['product_datas'] = product_datas
     context["no_picture"] = "/images/s.gif"
     context['length'] = len(tags)
-    return render(request,"search.html", context)
+    return render(request,"Second_hand_product.html", context)
 
 
 def download(url , name, money, date, search_keyword):
@@ -733,7 +703,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     
-    @list_route(methods=['GET'])  
+    @list_route(methods=['post'])  
     def recent_product(self, request):
         Product.del_recent_product()
         product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
@@ -747,66 +717,3 @@ class ProductViewSet(viewsets.ModelViewSet):
         Carousell_serializer = ProductSerializer(Carousell_result,many=True)
         print('============')
         return Response({'status':'success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)
-     
-    @list_route(methods=['GET'])  
-    def search_product(self, request):
-        
-        if request.user.is_authenticated:
-            id = request.user
-        else :
-            id = uuid.uuid1()
-        
-        Product.del_recent_product()
-        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
-        
-        product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
-        for i in product_info:
-            Product.objects.create(product_link=i[1], product_image_link=i[0],product_name=i[2],product_price=i[3],product_tag=i[4]) 
-        Dcfever_result = Product.sql_all_recent_product(product_tag = 'Dcfever')
-        Dcfever_serializer = ProductSerializer(Dcfever_result,many=True)
-        Carousell_result = Product.sql_all_recent_product(product_tag = 'Carousell')
-        Carousell_serializer = ProductSerializer(Carousell_result,many=True)
-        print('============')
-        return Response({'status':'success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)
-    @list_route(methods=['GET'])
-    def Searching_results(self,request):
-            request.encoding='utf-8'
-            #if  request.GET:
-            #    keyword = request.GET.get('keyword', None)
-            keyword = request.GET.get('keyword', "")
-            seach_type = request.GET.get('seach_type', "")
-            minarea = request.GET.get('minarea', "")
-            maxarea = request.GET.get('maxarea', "")
-            print('seach_type',seach_type)
-            links,url , name, money, date = Search_start(keyword,  minarea, maxarea,seach_type,)
-            '''context["url"] = url
-            context["product_links"] = links
-            context["name"] = name
-            context["money"] = money
-            context["date"] = date
-            context["search_keyword"] = keyword
-            context["length"] = range(0,len(url))
-            context["total"] = len(url)
-            context["no_picture"] = "/images/s.gif"
-            '''
-            
-            index = [i for i in range(0,len(links))]
-            contexts = []
-            print(url)
-            for i in range(0,len(url)):
-                if url[i] == '/images/s.gif':
-                    url[i]='https://www.dcfever.com/images/s.gif'
-                context = {"url":url[i],"name":name[i],"product_links":links[i],"product_price":money[i],"date":date[i]}
-                contexts.append(context)
-            data = zip(contexts)
-            response = Response(
-                    {"status":'search success',"message":{"search_keyword":keyword,"result":data}},
-                    content_type="application/json",
-                    status=status.HTTP_200_OK,
-                )
-            response.accepted_renderer = JSONRenderer()
-            response.accepted_media_type = "application/json"
-            response.renderer_context = {}
-            return response
-            #data = {"status":'search success',"message":{"search_keyword":keyword,"result":data}}
-            #return Response(data)

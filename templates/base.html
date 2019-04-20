@@ -32,25 +32,6 @@
 
 <body>
 
-  <div id="confirm_popup" class="modal">
-    <div class=" confirm_popupmodal-content animate">
-      <div class="modal-header">
-        <h4 class="modal-title">Confirmation</h4>
-        <button type="button" onclick=" document.getElementById('confirm_popup').style.display = 'none';" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete your account? This action cannot be undone and you will be unable to recover
-          any data.</p>
-      </div>
-      <div class="modal-footer">
-        <button onclick=" document.getElementById('confirm_popup').style.display = 'none';" class="btn btn-info"
-          data-dismiss="modal">Cancel</button>
-        <button onclick="btnUserDel()" class="btn btn-danger">Yes, delete it!</button>
-      </div>
-    </div>
-  </div>
-
-
 
   <div id="update" class="modal">
     <div class="form-style-8 updateinfomodal-content animate">
@@ -198,7 +179,7 @@
             "><span
                   class="typicons-heart icon"></span>
                 My Favourite</button></li>
-            <li><button class='btnDelAcc' onclick="confirm_popup()" style="background-color: #109fd1; border:0px ;     display: contents;color: white;
+            <li><button class='btnDelAcc' style="background-color: #109fd1; border:0px ;     display: contents;color: white;
               "><span
                   class="typicons-delete icon"></span>Delete Account</button></li>
           </ul>
@@ -223,7 +204,7 @@
 
   <div id="registor" class="modal">
     <form class="registormodal-content animate" action="/action_page.php">
-      <div class="registorimgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
         <span onclick="document.getElementById('registor').style.display='none'" class="close" title="Close PopUp">&times;</span>
         <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
         <h1 style="text-align:center;font-size: 23px;">Welcome Price Aggregator</h1>
@@ -281,8 +262,8 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto" id='home_bar'>
-          <li class="nav-item {% block home_active %}{% endblock %}"><a href="/" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="/find_my_product/" class="nav-link">Second Hand Product</a></li>
+          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
           <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
 
           {% if user.is_authenticated %}
@@ -324,14 +305,9 @@
 
   <style>
     /* Center the image and position the close button */
-    .imgcontainer {
+.imgcontainer {
     text-align: center;
-    margin: auto auto auto auto;
-    position: relative;
-}
-.registorimgcontainer {
-    text-align: center;
-    margin: 21px 24px 11px 52px;
+    margin: 24px 0 12px 0;
     position: relative;
 }
 .avatar {
@@ -355,127 +331,11 @@
 
 /* Modal Content Box */
 .loginmodal-content {
-  padding: 20px;
     background-color: #fefefe;
     margin: 10% auto 15% auto;
     border: 1px solid #888;
     width: 40%; 
   padding-bottom: 30px;
-
-}
-.registormodal-content {
-    background-color: #fefefe;
-    margin: 7% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
-
-} 
-@media (max-width: 1300.98px){
-      
-      .registormodal-content {
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 65%; 
-  padding-bottom: 30px;
-
-}
-.loginmodal-content {
-      padding: 20px;
-      background-color: #fefefe;
-      margin: 10% auto 15% auto;
-      border: 1px solid #888;
-      width: 70%;
-      padding-bottom: 30px;
-      }
-    }
-
-    @media (max-width: 850.98px){
-      .loginmodal-content {
-      padding: 20px;
-      background-color: #fefefe;
-      margin: 20% auto 15% auto;
-      border: 1px solid #888;
-      width: 70%;
-      padding-bottom: 30px;
-      }
-    }
-
-
-@media (max-width: 780.98px){
-      .loginmodal-content {
-      padding: 20px;
-      background-color: #fefefe;
-      margin: 20% auto 15% auto;
-      border: 1px solid #888;
-      width: 100%;
-      padding-bottom: 30px;
-      }
-      .registormodal-content {
-    background-color: #fefefe;
-    margin: 15% auto 15% auto;
-    border: 1px solid #888;
-    width: 100%; 
-  padding-bottom: 30px;
-
-}
-    }
-    @media (max-width: 450.98px){
-      .loginmodal-content {
-      padding: 20px;
-      background-color: #fefefe;
-      margin: 19% auto 15% auto;
-      border: 1px solid #888;
-      width: 100%;
-      padding-bottom: 30px;
-      }
-    }
-
-.confirm_popupmodal-content {
-  border-radius: 4px;
-  padding: 20px;
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
-
-}
-@media (max-width: 850.98px){
-  .confirm_popupmodal-content {
-  border-radius: 4px;
-  padding: 20px;
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 65%; 
-  padding-bottom: 30px;
-
-}
-}
-@media (max-width: 450.98px) {
-  .confirm_popupmodal-content {
-  border-radius: 4px;
-  padding: 20px;
-    background-color: #fefefe;
-    margin: 20% auto 15% auto;
-    border: 1px solid #888;
-    width: 100%; 
-  padding-bottom: 30px;
-
-}
-@media (max-width: 350.98px) {
-  .confirm_popupmodal-content {
-  border-radius: 4px;
-  padding: 20px;
-    background-color: #fefefe;
-    margin: 20% auto 15% auto;
-    border: 1px solid #888;
-    width: 100%; 
-  padding-bottom: 30px;
-
-}
 
 }
 
@@ -498,50 +358,14 @@
 
 }
 /* Modal Content Box */
-
-
-
-@media (max-width: 450.98px) {
-  .confirm_popupmodal-content {
-  border-radius: 4px;
-  padding: 20px;
+.registormodal-content {
     background-color: #fefefe;
-    margin: 20% auto 15% auto;
+    margin: 7% auto 15% auto;
     border: 1px solid #888;
-    width: 100%; 
+    width: 40%; 
   padding-bottom: 30px;
 
-}
-}
-@media (max-width: 350.98px) {
-  .confirm_popupmodal-content {
-  border-radius: 4px;
-  padding: 20px;
-    background-color: #fefefe;
-    margin: 20% auto 15% auto;
-    border: 1px solid #888;
-    width: 100%; 
-  padding-bottom: 30px;
-
-}
-
-}
-@media (max-width: 880.98px){
-      
-    }
-    @media (max-width: 450.98px){
-      
-      .registormodal-content {
-    background-color: #fefefe;
-    margin: 21% auto 15% auto;
-    border: 1px solid #888;
-    width: 100%; 
-  padding-bottom: 30px;
-
-}
-    }
-
-/* Modal Content Box */
+} /* Modal Content Box */
 .updateinfomodal-content {
     background-color: #fefefe;
     margin: 7% auto 15% auto;
@@ -605,129 +429,6 @@
     }
   </script>
 
-
-
-  
-  <!--用戶刪除-->
-  <script type="text/javascript">
-    function btnUserDel() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "PUT",
-        url: '/api/user/del_user/',
-        data: { },
-        beforeSend:function(xhr){
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-        },
-
-        success: function (data) {
-
-          console.log(data);
-          if (data['status'] == "delete success") {
-            console.log(data['status'] );
-            var status = document.getElementById('user_status')
-            var logout = document.getElementById('user_logout')
-            $("#user_status").html("Sign-In");
-            $("#user_status").attr("onclick", "btnLoginAction()");
-            $("#user_status").attr("id", "click_login");
-            $("#icon1").toggleClass('icon-user');
-            $("#user_logout").html("Sign-Up");
-            $("#user_logout").attr("onclick", "btnRegistorAction()");
-            $("#user_logout").attr("id", "id_regisblock");
-            var confirm_popup = document.getElementById('confirm_popup');
-            confirm_popup.style.display = "none"
-            $("#ftco-nav").collapse('hide');
-
-            /*  user_login =
-              '<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
-              user_signin =
-                '<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
-              $("#home_bar").append(user_login)
-              $("#home_bar").append(user_signin)*/
-
-            btnSuccessAction()
-        }
-
-
-        }
-      });
-    }
-  </script>
-  <!--UserInfo-->
-  <script>
-    function btnUserInfo() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "POST",
-        url: '/api/user/UserInfo/',
-        data: {
-          'csrfmiddlewaretoken': csrftoken,
-
-        },
-
-        success: function (data) {
-
-          console.log(data);
-          if (data['status'] == "info success") {
-            console.log('===========================')
-            console.log(data['message']['UserEmail'])
-            $(".info_name").html(data['message']['UserFirstName'] + '  ' + data['message']['UserLastName']);
-            $(".info_email").html(data['message']['UserEmail']);
-            var info_popup = document.getElementById('UserInfo');
-            info_popup.style.display = "block"
-            $("#ftco-nav").collapse('hide');
-          }
-
-        }
-      });
-    }
-  </script>
-
-  <!--用戶登出-->
-  <script type="text/javascript">
-    function btnLogout() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "POST",
-        url: '/api/user/logout/',
-        data: {
-          'csrfmiddlewaretoken': csrftoken,
-        },
-
-        success: function (data) {
-
-          console.log(data['status'] );
-          if (data['status'] == "logout success") {
-            console.log(data['status'] );
-            var status = document.getElementById('user_status')
-            var logout = document.getElementById('user_logout')
-            $("#user_status").html("Sign-In");
-            $("#user_status").attr("onclick", "btnLoginAction()");
-            $("#user_status").attr("id", "click_login");
-            $("#icon1").toggleClass('icon-user');
-            $("#user_logout").html("Sign-Up");
-            $("#user_logout").attr("onclick", "btnRegistorAction()");
-            $("#user_logout").attr("id", "id_regisblock");
-            var info_popup = document.getElementById('UserInfo');
-            info_popup.style.display = "none"
-            $("#ftco-nav").collapse('hide');
-
-            /*  user_login =
-              '<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
-              user_signin =
-                '<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
-              $("#home_bar").append(user_login)
-              $("#home_bar").append(user_signin)*/
-
-            btnSuccessAction()
-        }
-      }})
-    }
-  </script>
-
-
-
-
   <!--SubmitUserInfo-->
 
   <script>
@@ -768,7 +469,7 @@
           if (data['message']["password1"]) {
             $("#errorpass").html(data['message']['password1'][0]);
           }
-          if (data['status'] == 'update success') {
+          if (data['status'] == 'update success'){
 
             var status = document.getElementById('user_status')
             var logout = document.getElementById('user_logout')
@@ -781,10 +482,9 @@
             $("#user_logout").attr("id", "id_regisblock");
             var info_popup = document.getElementById('update');
             info_popup.style.display = "none"
-            
             btnSuccessAction()
           }
-
+          
           //btnSuccessAction2()
         }
       });
@@ -879,7 +579,6 @@
             $("#user_logout").attr("id", "id_regisblock");
             var info_popup = document.getElementById('UserInfo');
             info_popup.style.display = "none"
-            $("#ftco-nav").collapse('hide');
 
             /*  user_login =
               '<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
@@ -1053,13 +752,9 @@
     var status = document.getElementById('operate_success');
     var UserInfo = document.getElementById('UserInfo');
     var update = document.getElementById('update');
-    var confirm_popup = document.getElementById('confirm_popup');
 
     var status2 = document.getElementById('operate_success2');
     window.onclick = function (event) {
-      if (event.target == confirm_popup) {
-        confirm_popup.style.display = "none";
-      }
       if (event.target == login) {
         login.style.display = "none";
       }
@@ -1290,41 +985,38 @@
       -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
       -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
 
-    }
+    }    @media (max-width: 550.98px) {
 
-    @media (max-width: 550.98px) {
+.form-style-8 {
+font-family: 'Open Sans Condensed', arial, sans;
+width: 100%;
+height: 100%;
+padding: 30px;
+background: #FFFFFF;
+margin: 66px auto;
+box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
 
-      .form-style-8 {
-        font-family: 'Open Sans Condensed', arial, sans;
-        width: 100%;
-        height: 100%;
-        padding: 30px;
-        background: #FFFFFF;
-        margin: 66px auto;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-        -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-        -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+}
 
-      }
+}
+@media (max-width: 350.98px) {
 
-    }
+.form-style-8 {
+font-family: 'Open Sans Condensed', arial, sans;
+width: 100%;
+height: 100%;
+padding: 30px;
+background: #FFFFFF;
+margin: 104px auto;
+box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+-webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
 
-    @media (max-width: 350.98px) {
+}
 
-      .form-style-8 {
-        font-family: 'Open Sans Condensed', arial, sans;
-        width: 100%;
-        height: 100%;
-        padding: 30px;
-        background: #FFFFFF;
-        margin: 104px auto;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-        -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-        -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-
-      }
-
-    }
+}
 
 
     .form-style-8 h2 {
@@ -1337,21 +1029,20 @@
       padding: 20px;
       margin: -55px -31px 31px -31px;
     }
-
     @media (max-width: 450.98px) {
 
       .form-style-8 h2 {
-        background: #4D4D4D;
-        text-transform: uppercase;
-        font-family: 'Open Sans Condensed', sans-serif;
-        color: #FFFFFF;
-        font-size: 18px;
-        font-weight: 100;
-        padding: 20px;
-        margin: -55px -31px 31px -31px;
-      }
+    background: #4D4D4D;
+    text-transform: uppercase;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 100;
+    padding: 20px;
+    margin: -55px -31px 31px -31px;
+}
     }
-
+    
     .form-style-8 input[type="text"],
     .form-style-8 input[type="date"],
     .form-style-8 input[type="datetime"],
@@ -1400,52 +1091,13 @@
       text-transform: uppercase;
     }
 
-    .modal-confirm h4 {
-      display: inline-block;
-      font-size: 26px;
-    }
-
-    .modal-title {
-      font-family: inherit;
-      font-weight: 500;
-      line-height: 1.1;
-      color: inherit;
-    }
-
-    .modal-header {
-      padding-top: 29px;
-      border-bottom: none;
-      position: relative;
-    }
-
-    .modal-footer {
-      background: #ecf0f1;
-      border-color: #e6eaec;
-      text-align: right;
-      margin: 0 -20px -30px;
-      border-radius: 0 0 5px 5px;
-    }
-
-    .modal-confirm .modal-content {
-      padding: 20px;
-      border-radius: 5px;
-      border: none;
-    }
-
     .form-style-8 input[type="button"]:hover,
     .form-style-8 input[type="submit"]:hover {
       background: linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
       background-color: #34CACA;
-
-
     }
   </style>
-  <script>
-    function confirm_popup() {
-      document.getElementById('UserInfo').style.display = 'none'
-      document.getElementById('confirm_popup').style.display = 'block';
-    }
-  </script>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
   <script src="{% static 'js/csrf.js' %}"></script>
