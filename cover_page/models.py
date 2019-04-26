@@ -7,9 +7,25 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser, BaseUserManager ## A new class is imported. ##
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+from django.contrib.auth.models import User
 
+class My_Favourite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
+    product_link = models.TextField()
+    product_name = models.TextField()
+    product_price = models.TextField()
+    class Meta:
+        db_table = "User_Favourite"
 
-
+class Search_product(models.Model):
+    user =  models.TextField()
+    product_link = models.TextField()
+    product_image_link = models.TextField()
+    product_name = models.TextField()
+    product_price = models.TextField()
+    selling_website = models.TextField()
+        
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
 

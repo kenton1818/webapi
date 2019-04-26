@@ -17,13 +17,18 @@ from django.contrib import admin
 from django.conf.urls import url
 from django.urls import path
 from . import views
-
+from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
 
     path('', views.Cover_page , name = 'cover_page'),
     path('find_my_product/', views.find_my_product, name='find_my_product'),
-    path('Search/', views.Web_scrawler, name='search'),
-    path('signup/', views.signup, name='signup'),
-    path('login/', views.loginAPI, name='login'),
+    path('api/Favourite/', views.Favourite_RestView.as_view()),
+    path('api/user/', views.UserViewSet.as_view()),
+    path('api/product/', views.RecentProductViewSet.as_view()),
+    path('user/login/', views.user_login),
+    path('user/logout/', views.user_logout),
+    path('find_my_product/Search/',views.Searching_results)
+    
 
 ]
+
