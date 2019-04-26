@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% load index %}
+{% load staticfiles %}
+{% block title %}
+Price Aggregator -- Save Your Money
+{% endblock %}
+{% block home_active %}
+active
+{% endblock %}
+
+{% block body%}
+<div class="hero-wrap" style="background-image : url({% static '/images/back_image.jpg' %})">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row no-gutters slider-text align-items-center justify-content-center">
+			<div class="col-md-9 ftco-animate text-center">
+				<p class="breadcrumbs"><span class="mr-2"><a href="/">Home</a></span> <span>Searching</span></p>
+				<h1 class="mb-3 bread">Find Your Second Hand Product</h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+<section class="ftco-search">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 search-wrap">
+				<h2 class="heading h5 d-flex align-items-center pr-4"><span class="ion-ios-search mr-3"></span> Search
+					Product
+				</h2>
+				<div class="search-property">
+					<div class="row">
+						<div class="col-md align-items-end">
+							<div class="form-group">
+								<label for="Keyword">Keyword </label>
+								<div class="form-field">
+									<div class="icon"><span class="icon-pencil"></span></div>
+									<input type="text" name="keyword" id="Keyword" class="form-control"
+										placeholder="Keyword">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md align-items-end">
+							<div class="form-group">
+								<label for="Product_type">Product Type (dcfever only)</label>
+								<div class="form-field">
+									<div class="select-wrap">
+										<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+										<select name="seach_type" id="Product_type" class="form-control">
+											<option value="All" class="option_value">All</option>
+											<option value="Mobile Communication" class="option_value">Mobile
+												Communication</option>
+											<option value="Photography" class="option_value">Photography</option>
+											<option value="Computer" class="option_value">Computer</option>
+											<option value="Audio" class="option_value">Audio</option>
+											<option value="Game" class="option_value">Game</option>
+											<option value="Watch" class="option_value">Watch</option>
+											<option value="Clothing" class="option_value">Clothing</option>
+											<option value="Electrical appliances" class="option_value">Electrical
+												appliances</option>
+											<option value="Other" class="option_value">Other</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md align-items-end">
+							<div class="form-group">
+								<label for="Min_price">Min Area </label>
+								<div class="form-field">
+									<div class="icon"><span class="icon-pencil"></span></div>
+									<input type="text" id="minarea" name="minarea" class="form-control"
+										placeholder="Min Area">
+								</div>
+							</div>
+						</div>
+						<div class="col-md align-items-end">
+							<div class="form-group">
+								<label for="Max_price">Max Area </label>
+								<div class="form-field">
+									<div class="icon"><span class="icon-pencil"></span></div>
+									<input type="text" name="maxarea" id="maxarea" class="form-control"
+										placeholder="Max Area">
+								</div>
+							</div>
+						</div>
+						<div class="col-md align-self-end">
+							<div class="form-group">
+								<div class="form-field">
+									<input type="submit" id="btn_primary" value="Search"
+										class="form-control btn btn-primary" id="search_btn" onclick="BtnSearch()" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<section class="ftco-section bg-light">
+	<div class="container ">
+		<div class="row" id="search_result">
+		</div>
+		<div class="result_container">
+		</div>
+	</div>
+
+</section>
+
+<script>
+
+
+
+ //search
+ function BtnSearch() {
+
+Keyword = document.getElementById("Keyword").value;
+Product_type = document.getElementById("Product_type").value;
+minarea = document.getElementById("minarea").value;
+maxarea = document.getElementById("maxarea").value;
+$(".btn-primary").attr('value', 'Searching...');
+maxarea = document.getElementById("maxarea").value;
+
+page = 0
+$.ajax({
+	type: "GET",
+	url: 'find_my_product/Search/',
+	data: {
+		keyword: Keyword,
+		seach_type: Product_type,
+		minarea: minarea,
+		maxarea: maxarea,
+		page: page
+	},
+
+	success: function (data) {
+		length = data['length']
+		console.log(data)
+		$(".col-md-4").remove();
+
+		$(".search_keyword").remove();
+		title = '<h1 class="search_keyword" style = "font-size:4em">Showing results for "' + data['search_keyword'] + '"</h1>'
+		$('#search_result').append(title)
+		$(".btn-primary").attr('value', 'Search');
+
+		console.log(length)
+		console.log(data)
+		for (var i = 0; i < length; i++) {
+
+			date = data['message']['result'][i][0]['date']
+			name = data['message']['result'][i][0]['name']
+			product_links = data['message']['result'][i][0]['product_links']
+			product_price = data['message']['result'][i][0]['product_price']
+			url = data['message']['result'][i][0]['url']
+			tag = data['message']['result'][i][0]['tag']
+			console.log(name)
+			classname = "add_product" + i
+			console.log(classname)
+			buttonname = "submit_form" + i
+			search_result =
+				'<form  class="col-md-4 ftco-animate fadeInUp ftco-animated ' + classname +
+				'" >	<div class="properties"><a href="' + product_links +
+				'" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(' +
+				url +
+				');">	<div class="icon d-flex justify-content-center align-items-center">	<span class="icon-search2"></span></div></a><div class="text p-3"><span class="status sale">' +
+				tag + '</span><div class="d-flex"><div class="one"><h3><a href=' + product_links +
+				'> ' + name + '<div class = ' + classname + '-name' + ' style="display: none;" >' +
+				name + '</div></a></h3><p>' + date +
+				'</p>	</div><div class="two"><span class="price"> ' +
+				product_price + '  <input class =' +
+				classname + '-price' +
+				'  style="border: 0px;outline:none;cursor: pointer ;color: #f05d23;" type="hidden" name="product_price" value="' +
+				product_price +
+				'" /><input class =' +
+				classname + '-tag' +
+				'  style="border: 0px;outline:none;cursor: pointer ;color: #f05d23;" type="hidden" name="product_price" value="' +
+				tag +
+				'" /> <input class =' + classname + '-link' +
+				' style="border: 0px;outline:none;cursor: pointer ;color: #f05d23;" type="hidden" name="product_links" value="' +
+				product_links +
+				'" /> </span><span><button class = "' + buttonname + '" id = ' + classname +
+				' name="subject" type="submit" style = "margin: 25px 0px 1px -68px;border: none;    color: white;    padding: 1px 6px;background-color: #03A9F4;    text-align: center;">Add My Favourite</button></span></div></div>	</div></form>'
+			$(search_result).appendTo('#search_result').find('.' + buttonname).on('click', function (
+				event) {
+				console.log(event.target.id)
+				event.preventDefault();
+				var price = $("." + event.target.id + "-price").val()
+				var name = $("." + event.target.id + "-name").text()
+				var link = $("." + event.target.id + "-link").val()
+				var tag = $("." + event.target.id + "-tag").val()
+				var csrftoken = getCookie('csrftoken');
+				var qualifyURL = $('head base').attr('href');
+				$.ajax({
+					type: "POST",
+					url: qualifyURL + "api/Favourite/",
+					data: {
+						'price': price,
+						'name': name,
+						'link': link,
+						'csrfmiddlewaretoken': csrftoken,
+
+					}, // serializes the form's elements.
+					success: function (data) {
+						if (data['status'] == "add success") {
+							document.getElementById('operate_success').style
+								.display = 'block';
+						}
+						if (data['status'] == "add false") {
+							document.getElementById('operate_fails').style
+								.display = 'block';
+						}
+					}
+				});
+
+
+			})
+
+		}
+
+
+
+	},
+
+});
+}
+</script>
+{% endblock %}

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-
+  <base href="http://34.92.149.102/">
   {% csrf_token %}
   <title>Price Aggregator -- Save Your Money</title>
   <meta charset="utf-8">
@@ -32,12 +32,31 @@
 
 <body>
 
+  <div id="confirm_popup" class="modal">
+    <div class=" confirm_popupmodal-content animate">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmation</h4>
+        <button type="button" onclick=" document.getElementById('confirm_popup').style.display = 'none';" class="close"
+          data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete your account? This action cannot be undone and you will be unable to recover
+          any data.</p>
+      </div>
+      <div class="modal-footer">
+        <button onclick=" document.getElementById('confirm_popup').style.display = 'none';" class="btn btn-info"
+          data-dismiss="modal">Cancel</button>
+        <button onclick="btnUserDel()" class="btn btn-danger">Yes, delete it!</button>
+      </div>
+    </div>
+  </div>
 
   <div id="update" class="modal">
     <div class="form-style-8 updateinfomodal-content animate">
       <form class=''>
         <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
-          <span onclick="document.getElementById('registor').style.display='none'" class="close" title="Close PopUp">&times;</span>
+          <span onclick="document.getElementById('update').style.display='none'" class="close"
+            title="Close PopUp">&times;</span>
           <h2>Update your Info</h2>
         </div>
         <center>
@@ -45,21 +64,23 @@
             <div id="errorname" style="color:red">
             </div>
             <label for="InputFname">First Name</label>
-            <input style="width: 50%;" type="text" class="form-control form_FN" id="form_FN" aria-describedby="emailHelp"
-              placeholder="First Name" value="">
+            <input style="width: 50%;" type="text" class="form-control form_FN" id="form_FN"
+              aria-describedby="emailHelp" placeholder="First Name" value="">
           </div>
           <div class="form-group">
             <label for="InputLname">Last Name</label>
-            <input style="width: 50%;" type="text" class="form-control form_LN" id="form_LN" aria-describedby="emailHelp"
-              placeholder="Last Name" value="">
+            <input style="width: 50%;" type="text" class="form-control form_LN" id="form_LN"
+              aria-describedby="emailHelp" placeholder="Last Name" value="">
           </div>
           <div class="form-group">
             <div id="erroremail" style="color:red">
             </div>
             <label for="InputEmail">Email address</label>
-            <input style="width: 80%;" type="email" class="form-control form_Email" id="form_Email" aria-describedby="emailHelp"
-              placeholder="Enter email" value="">
+            <input style="width: 80%;" type="email" class="form-control form_Email" id="form_Email"
+              aria-describedby="emailHelp" placeholder="Enter email" value="">
           </div>
+
+
           <div class="form-group">
             <div id="errorexistpass" style="color:red">
             </div>
@@ -99,15 +120,16 @@
   <div id="login" class="modal">
     <form class="loginmodal-content animate" action="/action_page.php">
       <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
-        <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close PopUp">&times;</span>
+        <span onclick="document.getElementById('login').style.display='none'" class="close"
+          title="Close PopUp">&times;</span>
         <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
         <h1 style="text-align:center;font-size: 23px;">Welcome Price Aggregator</h1>
       </div>
       <center>
         <div class="form-group">
           <label for="exampleInputUsername">Email</label>
-          <input style="width: 80%;" type="email" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp"
-            placeholder="Email">
+          <input style="width: 80%;" type="email" class="form-control" id="exampleInputUsername"
+            aria-describedby="emailHelp" placeholder="Email">
           <small id="emailHelp" class="form-text text-muted">Enter your registred E-mail ID</small>
         </div>
         <div class="form-group">
@@ -116,13 +138,36 @@
             placeholder="Password" />
           <div id="errorlogin" style="color:red"></div>
         </div>
-        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="userlogin()">Login</button>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px"
+          onclick="userlogin()">Login</button>
       </center>
     </form>
   </div>
 
+  <div id="My_Favourite" class="modal">
+    <div class='loginmodal-content animate'>
+      <span onclick="document.getElementById('My_Favourite').style.display='none'" class="close"
+        title="Close PopUp">&times;</span>
+      <table class="table table-dark" id = "My_Favourite_table">
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Delete</th>
+
+          </tr>
+        </thead>
+        <tbody id="My_Favourite_result">
 
 
+        </tbody>
+      </table>
+
+      <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px"
+        onclick="btnOkAction()">OK</button>
+    </div>
+  </div>
+  </div>
 
 
 
@@ -130,14 +175,49 @@
   <div id="operate_success" class="modal">
     <div class='loginmodal-content animate'>
       <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
-        <span onclick="document.getElementById('operate_success').style.display='none'" class="close" title="Close PopUp">&times;</span>
+        <span onclick="document.getElementById('operate_success').style.display='none'" class="close"
+          title="Close PopUp">&times;</span>
         <img src="{% static '/images/operation_success_icon__406113.png' %}" alt="Avatar" class="avatar">
         <h1 style="text-align:center;font-size: 23px;">Operation Success</h1>
       </div>
       <center>
-        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="btnOkAction()">OK</button>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px"
+          onclick="btnOkAction()">OK</button>
     </div>
     </center>
+  </div>
+
+
+  <div id="operate_fails" class="modal">
+    <div class='loginmodal-content animate'>
+      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+        <span onclick="document.getElementById('operate_fails').style.display='none'" class="close"
+          title="Close PopUp">&times;</span>
+        <img src="{% static '/images/operation_success_icon__406113.png' %}" alt="Avatar" class="avatar">
+        <h1 style="text-align:center;font-size: 23px;">Please Login First</h1>
+      </div>
+      <center>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px"
+          onclick="btnOkAction()">OK</button>
+    </div>
+    </center>
+  </div>
+
+
+  <div class='loginmodal-content animate' style="
+    display: none;
+">
+    <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+      <span onclick="document.getElementById('operate_success').style.display='none'" class="close"
+        title="Close PopUp">&times;</span>
+      <img src="{% static '/images/operation_success_icon__406113.png' %}" alt="Avatar" class="avatar">
+      <h1 style="text-align:center;font-size: 23px;">Operation Success</h1>
+    </div>
+    <center>
+      <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px"
+        onclick="btnOkAction()">OK</button>
+  </div>
+  </center>
   </div>
 
   <div id="operate_success2" class="modal">
@@ -148,7 +228,8 @@
         <h1 style="text-align:center;font-size: 23px;">Operation Success</h1>
       </div>
       <center>
-        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px" onclick="window.location.reload()">OK</button>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px"
+          onclick="window.location.reload()">OK</button>
     </div>
     </center>
   </div>
@@ -156,7 +237,8 @@
 
 
   <div id="UserInfo" class="modal" style="display:none">
-    <span onclick="document.getElementById('UserInfo').style.display='none'" class="close" title="Close PopUp">&times;</span>
+    <span onclick="document.getElementById('UserInfo').style.display='none'" class="close"
+      title="Close PopUp">&times;</span>
     <div id="vcard">
       <div id="card-content">
         <div id="profile">
@@ -173,15 +255,12 @@
         <div id="options">
           <ul>
             <li><button class='btnUpdateInfo' onclick="btnUpdateUserInfo()" style="background-color: #109fd1; border:0px ;     display: contents;color: white;
-              "><span
-                  class="typicons-write icon"></span>Update Info</button></li>
-            <li><button class='btnFavourite' style="background-color: #109fd1; border:0px ;     display: contents;color: white;
-            "><span
-                  class="typicons-heart icon"></span>
+              "><span class="typicons-write icon"></span>Update Info</button></li>
+            <li><button class='btnFavourite' onclick="btnMYFavourite()" style="background-color: #109fd1; border:0px ;     display: contents;color: white;
+            "><span class="typicons-heart icon"></span>
                 My Favourite</button></li>
-            <li><button class='btnDelAcc' style="background-color: #109fd1; border:0px ;     display: contents;color: white;
-              "><span
-                  class="typicons-delete icon"></span>Delete Account</button></li>
+            <li><button class='btnDelAcc' onclick="confirm_popup()" style="background-color: #109fd1; border:0px ;     display: contents;color: white;
+              "><span class="typicons-delete icon"></span>Delete Account</button></li>
           </ul>
         </div>
       </div>
@@ -204,14 +283,15 @@
 
   <div id="registor" class="modal">
     <form class="registormodal-content animate" action="/action_page.php">
-      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
-        <span onclick="document.getElementById('registor').style.display='none'" class="close" title="Close PopUp">&times;</span>
+      <div class="registorimgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+        <span onclick="document.getElementById('registor').style.display='none'" class="close"
+          title="Close PopUp">&times;</span>
         <img src="{% static '/images/icon.jpg' %}" alt="Avatar" class="avatar">
         <h1 style="text-align:center;font-size: 23px;">Welcome Price Aggregator</h1>
       </div>
       <center>
         <div class="form-group">
-          <div id="errorname" style="color:red">
+          <div id="errornamere" style="color:red">
           </div>
           <label for="InputFname">First Name</label>
           <input style="width: 50%;" type="text" class="form-control" id="InputFname" aria-describedby="emailHelp"
@@ -225,7 +305,7 @@
 
 
         <div class="form-group">
-          <div id="erroremail" style="color:red">
+          <div id="erroremailre" style="color:red">
           </div>
           <label for="InputEmail">Email address</label>
           <input style="width: 80%;" type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
@@ -234,7 +314,7 @@
 
 
         <div class="form-group">
-          <div id="errorpass" style="color:red">
+          <div id="errorpassre" style="color:red">
           </div>
           <label for="Password1">Create Password</label>
           <input style="width: 80%;" type="password" class="form-control" id="Password1" placeholder="Password" />
@@ -244,7 +324,8 @@
           <input style="width: 80%;" type="password" class="form-control" id="InputPassword2" placeholder="Password" />
         </div>
       </center>
-      <button type="button" class="btn btn-primary btn-lg btn-block login-btn mb-2 mt-2" onclick="signup()" style="width:100%">Sign
+      <button type="button" class="btn btn-primary btn-lg btn-block login-btn mb-2 mt-2" onclick="signup()"
+        style="width:100%">Sign
         up</button>
 
     </form>
@@ -255,20 +336,20 @@
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
       <a class="navbar-brand" href="{% url 'cover_page'  %}">Price <span> Aggregator</span></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav"
-        aria-expanded="false" aria-label="Toggle navigation" id='menu'>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+        aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation" id='menu'>
         <span class="oi oi-menu"></span> Menu
       </button>
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto" id='home_bar'>
-          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="property.html" class="nav-link">Property</a></li>
-          <li class="nav-item"><a href="agents.html" class="nav-link">Agents</a></li>
-
+          <li class="nav-item {% block home_active %}{% endblock %}"><a href="/" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="/find_my_product/" class="nav-link">Second Hand Product</a></li>
+          
           {% if user.is_authenticated %}
 
-          <li class="nav-item cta" id='id_loginedblock'><button id="user_status" onclick="btnUserInfo()" class="nav-link ml-lg-2"><span></span>
+          <li class="nav-item cta" id='id_loginedblock'><button id="user_status" onclick="btnUserInfo()"
+              class="nav-link ml-lg-2"><span></span>
               {{ user}}</button></li>
 
           <li class="nav-item cta cta-colored"><button id='user_logout' onclick="btnLogout()" class="nav-link">
@@ -279,9 +360,11 @@
           {% else %}
           <!--  login in -->
 
-          <li class="nav-item cta" id='id_loginblock'><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span></span>
+          <li class="nav-item cta" id='id_loginblock'><button id="click_login" onclick="btnLoginAction()"
+              class="nav-link ml-lg-2"><span></span>
               Sign-In</button></li>
-          <li class="nav-item cta cta-colored"><button id='id_regisblock' onclick="btnRegistorAction()" class="nav-link"><span></span>
+          <li class="nav-item cta cta-colored"><button id='id_regisblock' onclick="btnRegistorAction()"
+              class="nav-link"><span></span>
               <S> </S>Sign-Up</button></li>
 
           {% endif %}
@@ -294,7 +377,8 @@
 
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px" display="block">
       <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#F96D00" /></svg></div>
 
 
 
@@ -305,100 +389,278 @@
 
   <style>
     /* Center the image and position the close button */
-.imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-    position: relative;
-}
-.avatar {
-    width: 30%;
-  height: 30%;
-    border-radius: 50%;
-}
+    .imgcontainer {
+      text-align: center;
+      margin: auto auto auto auto;
+      position: relative;
+    }
 
-/* The Modal (background) */
-.modal {
-  display:none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
+    .registorimgcontainer {
+      text-align: center;
+      margin: 21px 24px 11px 52px;
+      position: relative;
+    }
 
-/* Modal Content Box */
-.loginmodal-content {
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
+    .avatar {
+      width: 30%;
+      height: 30%;
+      border-radius: 50%;
+    }
 
-}
+    /* The Modal (background) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
 
-/* Modal Content Box */
-.sucessmodal-content {
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
+    /* Modal Content Box */
+    .loginmodal-content {
+      padding: 20px;
+      background-color: #fefefe;
+      margin: 10% auto 15% auto;
+      border: 1px solid #888;
+      width: 40%;
+      padding-bottom: 30px;
 
-}
-/* Modal Content Box */
-.userInfo-content {
-    background-color: #fefefe;
-    margin: 10% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
+    }
 
-}
-/* Modal Content Box */
-.registormodal-content {
-    background-color: #fefefe;
-    margin: 7% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
+    .registormodal-content {
+      background-color: #fefefe;
+      margin: 7% auto 15% auto;
+      border: 1px solid #888;
+      width: 40%;
+      padding-bottom: 30px;
 
-} /* Modal Content Box */
-.updateinfomodal-content {
-    background-color: #fefefe;
-    margin: 7% auto 15% auto;
-    border: 1px solid #888;
-    width: 40%; 
-  padding-bottom: 30px;
+    }
 
-} 
+    @media (max-width: 1300.98px) {
+
+      .registormodal-content {
+        background-color: #fefefe;
+        margin: 10% auto 15% auto;
+        border: 1px solid #888;
+        width: 65%;
+        padding-bottom: 30px;
+
+      }
+
+      .loginmodal-content {
+        padding: 20px;
+        background-color: #fefefe;
+        margin: 10% auto 15% auto;
+        border: 1px solid #888;
+        width: 70%;
+        padding-bottom: 30px;
+      }
+    }
+
+    @media (max-width: 850.98px) {
+      .loginmodal-content {
+        padding: 20px;
+        background-color: #fefefe;
+        margin: 20% auto 15% auto;
+        border: 1px solid #888;
+        width: 70%;
+        padding-bottom: 30px;
+      }
+    }
 
 
-/* The Close Button (x) */
-.close {
-    position: absolute;
-    right: 25px;
-    top: 0;
-    color: #000;
-    font-size: 35px;
-    font-weight: bold;
-}
-.close:hover,.close:focus {
-    color: red;
-    cursor: pointer;
-}
+    @media (max-width: 780.98px) {
+      .loginmodal-content {
+        padding: 20px;
+        background-color: #fefefe;
+        margin: 20% auto 15% auto;
+        border: 1px solid #888;
+        width: 100%;
+        padding-bottom: 30px;
+      }
 
-/* Add Zoom Animation */
-.animate {
-    animation: zoom 0.6s
-}
-@keyframes zoom {
-    from {transform: scale(0)} 
-    to {transform: scale(1)}
-}
-</style>
+      .registormodal-content {
+        background-color: #fefefe;
+        margin: 15% auto 15% auto;
+        border: 1px solid #888;
+        width: 100%;
+        padding-bottom: 30px;
+
+      }
+    }
+
+    @media (max-width: 450.98px) {
+      .loginmodal-content {
+        padding: 20px;
+        background-color: #fefefe;
+        margin: 19% auto 15% auto;
+        border: 1px solid #888;
+        width: 100%;
+        padding-bottom: 30px;
+      }
+    }
+
+    .confirm_popupmodal-content {
+      border-radius: 4px;
+      padding: 20px;
+      background-color: #fefefe;
+      margin: 10% auto 15% auto;
+      border: 1px solid #888;
+      width: 40%;
+      padding-bottom: 30px;
+
+    }
+
+    @media (max-width: 850.98px) {
+      .confirm_popupmodal-content {
+        border-radius: 4px;
+        padding: 20px;
+        background-color: #fefefe;
+        margin: 10% auto 15% auto;
+        border: 1px solid #888;
+        width: 65%;
+        padding-bottom: 30px;
+
+      }
+    }
+
+    @media (max-width: 450.98px) {
+      .confirm_popupmodal-content {
+        border-radius: 4px;
+        padding: 20px;
+        background-color: #fefefe;
+        margin: 20% auto 15% auto;
+        border: 1px solid #888;
+        width: 100%;
+        padding-bottom: 30px;
+
+      }
+
+      @media (max-width: 350.98px) {
+        .confirm_popupmodal-content {
+          border-radius: 4px;
+          padding: 20px;
+          background-color: #fefefe;
+          margin: 20% auto 15% auto;
+          border: 1px solid #888;
+          width: 100%;
+          padding-bottom: 30px;
+
+        }
+
+      }
+
+      /* Modal Content Box */
+      .sucessmodal-content {
+        background-color: #fefefe;
+        margin: 10% auto 15% auto;
+        border: 1px solid #888;
+        width: 40%;
+        padding-bottom: 30px;
+
+      }
+
+      /* Modal Content Box */
+      .userInfo-content {
+        background-color: #fefefe;
+        margin: 10% auto 15% auto;
+        border: 1px solid #888;
+        width: 40%;
+        padding-bottom: 30px;
+
+      }
+
+      /* Modal Content Box */
+
+
+
+      @media (max-width: 450.98px) {
+        .confirm_popupmodal-content {
+          border-radius: 4px;
+          padding: 20px;
+          background-color: #fefefe;
+          margin: 20% auto 15% auto;
+          border: 1px solid #888;
+          width: 100%;
+          padding-bottom: 30px;
+
+        }
+      }
+
+      @media (max-width: 350.98px) {
+        .confirm_popupmodal-content {
+          border-radius: 4px;
+          padding: 20px;
+          background-color: #fefefe;
+          margin: 20% auto 15% auto;
+          border: 1px solid #888;
+          width: 100%;
+          padding-bottom: 30px;
+
+        }
+
+      }
+
+      @media (max-width: 880.98px) {}
+
+      @media (max-width: 450.98px) {
+
+        .registormodal-content {
+          background-color: #fefefe;
+          margin: 21% auto 15% auto;
+          border: 1px solid #888;
+          width: 100%;
+          padding-bottom: 30px;
+
+        }
+      }
+
+      /* Modal Content Box */
+      .updateinfomodal-content {
+        background-color: #fefefe;
+        margin: 7% auto 15% auto;
+        border: 1px solid #888;
+        width: 40%;
+        padding-bottom: 30px;
+
+      }
+
+
+      /* The Close Button (x) */
+      .close {
+        position: absolute;
+        right: 25px;
+        top: 0;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: red;
+        cursor: pointer;
+      }
+
+      /* Add Zoom Animation */
+      .animate {
+        animation: zoom 0.6s
+      }
+
+      @keyframes zoom {
+        from {
+          transform: scale(0)
+        }
+
+        to {
+          transform: scale(1)
+        }
+      }
+  </style>
 
   <!-- 當用戶點下login時自動宿回negbar -->
   <script>
@@ -418,6 +680,7 @@
       document.getElementById('operate_success').style.display = 'block';
     }
 
+
     function btnSuccessAction2() {
       document.getElementById('operate_success2').style.display = 'block';
     }
@@ -425,303 +688,476 @@
     function btnOkAction() {
       var status = document.getElementById('operate_success');
       status.style.display = "none";
+      var status2 = document.getElementById('operate_fails');
+      status2.style.display = "none";
+      var status3 = document.getElementById('My_Favourite');
+      status3.style.display = "none";
 
     }
   </script>
+
+
+
+<script>
+  //delete 
+ function btnUserDel() {
+ 	var csrftoken = getCookie('csrftoken');
+ 	var qualifyURL = $('head base').attr('href');
+ 	$.ajax({
+ 		type: "DELETE",
+ 		url: qualifyURL + 'api/user/',
+ 		data: {},
+ 		beforeSend: function (xhr) {
+ 			xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+ 		},
+
+ 		success: function (data) {
+
+ 			console.log(data);
+ 			if (data['status'] == "delete success") {
+ 				console.log(data['status']);
+ 				var status = document.getElementById('user_status')
+ 				var logout = document.getElementById('user_logout')
+ 				$("#user_status").html("Sign-In");
+ 				$("#user_status").attr("onclick", "btnLoginAction()");
+ 				$("#user_status").attr("id", "click_login");
+ 				$("#icon1").toggleClass('icon-user');
+ 				$("#user_logout").html("Sign-Up");
+ 				$("#user_logout").attr("onclick", "btnRegistorAction()");
+ 				$("#user_logout").attr("id", "id_regisblock");
+ 				var confirm_popup = document.getElementById('confirm_popup');
+ 				confirm_popup.style.display = "none"
+ 				$("#ftco-nav").collapse('hide');
+
+ 				/*  user_login =
+ 					'<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
+ 					user_signin =
+ 						'<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
+ 					$("#home_bar").append(user_login)
+ 					$("#home_bar").append(user_signin)*/
+
+ 				btnSuccessAction()
+ 			}
+
+
+ 		}
+ 	});
+ }
+
+
+  </script>
+  
+<script>
+ //get user info
+ function btnUserInfo() {
+ 	var csrftoken = getCookie('csrftoken');
+ 	var qualifyURL = $('head base').attr('href');
+ 	$.ajax({
+ 		type: "GET",
+ 		url: qualifyURL + 'api/user/',
+ 		data: {
+ 			'csrfmiddlewaretoken': csrftoken,
+
+ 		},
+
+ 		success: function (data) {
+
+ 			console.log(data);
+ 			if (data['status'] == "info success") {
+ 				console.log('===========================')
+ 				console.log(data['message']['UserEmail'])
+ 				$(".info_name").html(data['message']['UserFirstName'] + '  ' + data['message']['UserLastName']);
+ 				$(".info_email").html(data['message']['UserEmail']);
+ 				var info_popup = document.getElementById('UserInfo');
+ 				info_popup.style.display = "block"
+ 				$("#ftco-nav").collapse('hide');
+ 			}
+
+ 		}
+ 	});
+ }
+
+</script>
+
+<script>
+//logout
+ function btnLogout() {
+ 	var csrftoken = getCookie('csrftoken');
+ 	var qualifyURL = $('head base').attr('href');
+ 	$.ajax({
+ 		type: "POST",
+ 		url: qualifyURL + 'user/logout/',
+ 		data: {
+ 			'csrfmiddlewaretoken': csrftoken,
+ 		},
+
+ 		success: function (data) {
+
+ 			console.log(data['status']);
+ 			if (data['status'] == "logout success") {
+ 				console.log(data['status']);
+ 				var status = document.getElementById('user_status')
+ 				var logout = document.getElementById('user_logout')
+ 				$("#user_status").html("Sign-In");
+ 				$("#user_status").attr("onclick", "btnLoginAction()");
+ 				$("#user_status").attr("id", "click_login");
+ 				$("#icon1").toggleClass('icon-user');
+ 				$("#user_logout").html("Sign-Up");
+ 				$("#user_logout").attr("onclick", "btnRegistorAction()");
+ 				$("#user_logout").attr("id", "id_regisblock");
+ 				var info_popup = document.getElementById('UserInfo');
+ 				info_popup.style.display = "none"
+ 				$("#ftco-nav").collapse('hide');
+
+ 				/*  user_login =
+ 					'<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
+ 					user_signin =
+ 						'<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
+ 					$("#home_bar").append(user_login)
+ 					$("#home_bar").append(user_signin)*/
+
+ 				btnSuccessAction()
+ 			}
+ 		}
+ 	})
+ }
+
+</script>
+
+
+
 
   <!--SubmitUserInfo-->
 
-  <script>
-    function btnSubmitInfo() {
-      var csrftoken = getCookie('csrftoken');
-      email = document.getElementById("form_Email").value;
-      fname = document.getElementById("form_FN").value;
-      lname = document.getElementById("form_LN").value;
-      exis_pw = document.getElementById("form_password_now").value;
 
-      password1 = document.getElementById("form_password1").value;
-      password2 = document.getElementById("form_password2").value;
+<script>
 
-      $.ajax({
-        type: "POST",
-        url: '/api/user/UpdateInfo/',
-        data: {
-          'csrfmiddlewaretoken': csrftoken,
-          'existing_pw': exis_pw,
-          'first_name': fname,
-          'last_name': lname,
-          'email': email,
-          'password1': password1,
-          'password2': password2,
-        },
+  //SubmitUserInfo
+ function btnSubmitInfo() {
+ 	var csrftoken = getCookie('csrftoken');
+ 	exis_pw = document.getElementById("form_password_now").value;
+ 	password1 = document.getElementById("form_password1").value;
+ 	password2 = document.getElementById("form_password2").value;
+ 	email = document.getElementById("form_Email").value;
+ 	fname = document.getElementById("form_FN").value;
+ 	lname = document.getElementById("form_LN").value;
 
-        success: function (data) {
-          console.log(data)
-          if (data['status'] == "password falas") {
-            $("#errorexistpass").html("existing password is not match");
-          }
-          if (data['status'] == "password comfirm false") {
-            $("#errorpass").html(data['message']);
-          }
-          if (data['message']["password2"]) {
-            $("#errorpass").html(data['message']['password2'][0]);
-          }
-          if (data['message']["password1"]) {
-            $("#errorpass").html(data['message']['password1'][0]);
-          }
-          if (data['status'] == 'update success'){
+ 	$("#errorexistpass").html("")
+ 	$("#errorpass").html("")
+ 	var qualifyURL = $('head base').attr('href');
+ 	$.ajax({
+ 		type: "PUT",
+ 		url: qualifyURL + 'api/user/',
+ 		data: {
+ 			'csrfmiddlewaretoken': csrftoken,
+ 			'existing_pw': exis_pw,
+ 			'password1': password1,
+ 			'password2': password2,
+ 			'first_name': fname,
+ 			'last_name': lname,
+ 			'email': email,
+ 		},
+ 		beforeSend: function (xhr) {
+ 			xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+ 		},
+ 		success: function (data) {
+ 			console.log(data)
+ 			if (data['status'] == "password falas") {
+ 				$("#errorexistpass").html("password error maybe you not match or you have not fill it");
+ 			}
+ 			if (data['status'] == "password comfirm false") {
+ 				$("#errorpass").html(data['message']);
+ 			}
+ 			if (data['message']["password2"]) {
+ 				$("#errorpass").html(data['message']['password2'][0]);
+ 			}
+ 			if (data['message']["password1"]) {
+ 				$("#errorpass").html(data['message']['password1'][0]);
+ 			}
+ 			if (data['status'] == 'update success') {
 
-            var status = document.getElementById('user_status')
-            var logout = document.getElementById('user_logout')
-            $("#user_status").html("Sign-In");
-            $("#user_status").attr("onclick", "btnLoginAction()");
-            $("#user_status").attr("id", "click_login");
-            $("#icon1").toggleClass('icon-user');
-            $("#user_logout").html("Sign-Up");
-            $("#user_logout").attr("onclick", "btnRegistorAction()");
-            $("#user_logout").attr("id", "id_regisblock");
-            var info_popup = document.getElementById('update');
-            info_popup.style.display = "none"
-            btnSuccessAction()
-          }
-          
-          //btnSuccessAction2()
-        }
-      });
-    }
-  </script>
+ 				var status = document.getElementById('user_status')
+ 				var logout = document.getElementById('user_logout')
+ 				$("#user_status").html("Sign-In");
+ 				$("#user_status").attr("onclick", "btnLoginAction()");
+ 				$("#user_status").attr("id", "click_login");
+ 				$("#icon1").toggleClass('icon-user');
+ 				$("#user_logout").html("Sign-Up");
+ 				$("#user_logout").attr("onclick", "btnRegistorAction()");
+ 				$("#user_logout").attr("id", "id_regisblock");
+ 				var info_popup = document.getElementById('update');
+ 				info_popup.style.display = "none"
 
+ 				btnSuccessAction()
+ 			}
 
+ 			//btnSuccessAction2()
+ 		}
+ 	});
+ }
+
+</script>
+  
   <!--UpdateUserInfo-->
 
   <script>
-    function btnUpdateUserInfo() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "POST",
-        url: '/api/user/UserInfo/',
-        data: {
-          'csrfmiddlewaretoken': csrftoken,
-        },
+  
 
-        success: function (data) {
+    //UpdateUserInfo
+ function btnUpdateUserInfo() {
+ 	var csrftoken = getCookie('csrftoken');
+ 	var qualifyURL = $('head base').attr('href');
+ 	$.ajax({
+ 		type: "GET",
+ 		url: qualifyURL + 'api/user/',
+ 		data: {
+ 			'csrfmiddlewaretoken': csrftoken,
+ 		},
 
-          console.log(data);
-          if (data['status'] == "info success") {
-            console.log('===========================')
-            console.log(data['message']['UserEmail'])
-            $(".form_FN").attr('value', data['message']['UserFirstName']);
-            $(".form_LN").attr('value', data['message']['UserLastName']);
-            $(".form_Email").attr('value', data['message']['UserEmail']);
-            document.getElementById('update').style.display = 'block';
-            var info_popup = document.getElementById('UserInfo');
-            info_popup.style.display = "none"
-          }
+ 		success: function (data) {
 
-        }
-      });
-    }
-  </script>
-  <!--UserInfo-->
-  <script>
-    function btnUserInfo() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "POST",
-        url: '/api/user/UserInfo/',
-        data: {
-          'csrfmiddlewaretoken': csrftoken,
+ 			console.log(data);
+ 			if (data['status'] == "info success") {
+ 				console.log('===========================')
+ 				console.log(data['message']['UserEmail'])
+ 				$(".form_FN").attr('value', data['message']['UserFirstName']);
+ 				$(".form_LN").attr('value', data['message']['UserLastName']);
+ 				$(".form_Email").attr('value', data['message']['UserEmail']);
+ 				$(".form_password_now").val('');
+ 				$(".form_password1").val('');
+ 				$(".form_password2").val('');
+ 				$("#errorexistpass").html("")
 
-        },
+ 				document.getElementById('update').style.display = 'block';
+ 				var info_popup = document.getElementById('UserInfo');
+ 				info_popup.style.display = "none"
+ 			}
 
-        success: function (data) {
+ 		}
+ 	});
+ }
 
-          console.log(data);
-          if (data['status'] == "info success") {
-            console.log('===========================')
-            console.log(data['message']['UserEmail'])
-            $(".info_name").html(data['message']['UserFirstName'] + '  ' + data['message']['UserLastName']);
-            $(".info_email").html(data['message']['UserEmail']);
-            var info_popup = document.getElementById('UserInfo');
-            info_popup.style.display = "block"
-            $("#ftco-nav").collapse('hide');
-          }
+</script>
+  
 
-        }
-      });
-    }
-  </script>
+<script>  
+ //Favourite
+ function btnMYFavourite() {
+ 	var csrftoken = getCookie('csrftoken');
+ 	var qualifyURL = $('head base').attr('href');
+ 	$.ajax({
+ 		type: "GET",
+ 		url: qualifyURL + 'api/Favourite/',
+ 		data: {
+ 			'csrfmiddlewaretoken': csrftoken,
+ 		},
 
-  <!--用戶登出-->
-  <script type="text/javascript">
-    function btnLogout() {
-      var csrftoken = getCookie('csrftoken');
-      $.ajax({
-        type: "POST",
-        url: '/api/user/logout/',
-        data: {
-          'csrfmiddlewaretoken': csrftoken,
-        },
+ 		success: function (data) {
+       console.log(data)
+ 			if (data['message'] == "no record") {
+       console.log("NO DATA");
+ 				$(".login-btn").html("Your favourite record is empty")
+ 				var info_popup = document.getElementById('UserInfo');
+ 				var My_Favourite_table = document.getElementById('My_Favourite_table');
+ 				info_popup.style.display = "none"
+ 				My_Favourite_table.style.display = "none"
+ 				document.getElementById('My_Favourite').style.display = 'block';
+ 			} else {
+ 				console.log(data)
+ 				console.log(data['message'][0]["product_name"])
+ 				context = data['message']
+ 				for (i in context) {
 
-        success: function (data) {
+ 					classname = "add_product" + i
+ 					buttonname = "submit_form" + i
+ 					name = context = data['message'][i]['product_name']
+ 					item_id = data['message'][i]['pk']
+ 					if (name.length > 20) name = name.substring(0, 20)
+ 					name = name + "..."
+ 					price = context = data['message'][i]['product_price']
+ 					link = context = data['message'][i]['product_link']
+ 					console.log()
+ 					My_Favourite_result = '<tr class = "' + classname + '-trID' + '"> <td><a href="'+link+'">' + name + '</a></td><td>' + price + '</td><td><form><input class =' +
+ 						classname +
+ 						'  style="border: 0px;outline:none;cursor: pointer ;color: #f05d23;" type="hidden" name="product_price" value="' +
+ 						item_id + '" /><button class = "' + buttonname + '" id = ' + classname +
+ 						' name="subject" type="submit" >Delete Record</button><form></td> </tr>'
+ 					$(My_Favourite_result).appendTo('#My_Favourite_result').find('.' + buttonname).on('click', function (
+ 						event) {
+ 						event.preventDefault();
+ 						var pk = $("." + event.target.id).val()
 
-          console.log(data);
-          if (data['status'] == "logout success") {
+ 						var tr_class = "." + event.target.id + "-trID"
+ 						console.log(tr_class)
+ 						var csrftoken = getCookie('csrftoken');
+ 						var qualifyURL = $('head base').attr('href');
+ 						$.ajaxSetup({
+ 							headers: {
+ 								"X-CSRFToken": getCookie("csrftoken")
+ 							}
+ 						});
+ 						$.ajax({
+ 							type: "DELETE",
+ 							url: qualifyURL + "api/Favourite/",
+ 							data: {
+ 								'pk': pk,
+ 								'csrfmiddlewaretoken': csrftoken,
 
-            var status = document.getElementById('user_status')
-            var logout = document.getElementById('user_logout')
-            $("#user_status").html("Sign-In");
-            $("#user_status").attr("onclick", "btnLoginAction()");
-            $("#user_status").attr("id", "click_login");
-            $("#icon1").toggleClass('icon-user');
-            $("#user_logout").html("Sign-Up");
-            $("#user_logout").attr("onclick", "btnRegistorAction()");
-            $("#user_logout").attr("id", "id_regisblock");
-            var info_popup = document.getElementById('UserInfo');
-            info_popup.style.display = "none"
+ 							},
+ 							success: function (data) {
+ 								if (data['status'] == "delete success") {
+ 									alert("success")
+ 									$(tr_class).hide();
 
-            /*  user_login =
-              '<li class="nav-item cta" id="id_loginblock"><button id="click_login" onclick="btnLoginAction()" class="nav-link ml-lg-2"><span                class="icon-user"></span> Sign-In</button></li>'
-              user_signin =
-                '<li class="nav-item cta cta-colored" id="id_regisblock"><button id="click_register" onclick="btnRegistorAction()" class="nav-link"><span  class="icon-pencil"></span> <S> </S>Sign-Up</button></li>'
-              $("#home_bar").append(user_login)
-              $("#home_bar").append(user_signin)*/
+ 								}
+ 								if (data['status'] == "add false") {
+ 									document.getElementById('operate_fails').style.display = 'block';
+ 								}
+ 							}
+ 						});
 
-            btnSuccessAction()
+ 					})
+ 				}
 
+ 				var info_popup = document.getElementById('UserInfo');
+ 				var My_Favourite_table = document.getElementById('My_Favourite_table');
+ 				info_popup.style.display = "none"
+ 				document.getElementById('My_Favourite').style.display = 'block';
+ 			}
+ 		}
+ 	});
+ }
+</script>
+  
+<script type="text/javascript">  
+  //login
+ function userlogin() {
+ 	var csrftoken = getCookie('csrftoken');
+ 	email = document.getElementById("exampleInputUsername").value;
+ 	password = document.getElementById("exampleInputPassword").value;
+ 	$("#errorlogin").html("");
+ 	if (email == '') {
+ 		$("#errorlogin").html("Please enter E-mail address.");
+ 	} else if (password == '') {
+ 		$("#errorlogin").html("Please enter Password.");
+ 	} else {
+ 		csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+ 		$("#errorlogin").html("");
+ 		var qualifyURL = $('head base').attr('href');
+ 		$.ajax({
+ 			type: "POST",
+ 			url: qualifyURL + 'user/login/',
+ 			data: {
+ 				'csrfmiddlewaretoken': csrftoken,
+ 				'email': email,
+ 				'password': password,
+ 			},
 
+ 			success: function (data) {
 
-          }
+ 				console.log(data);
+ 				if (data['status'] == "login success") {
 
-        }
-      });
-    }
-  </script>
+ 					var registor = document.getElementById('id_regisblock')
+ 					var login = document.getElementById('click_login')
+ 					$("#click_login").html(email);
+ 					$("#click_login").attr("onclick", "btnUserInfo()");
+ 					$("#click_login").attr("id", "user_status");
+ 					$("#id_regisblock").html("Logout");
+ 					$("#id_regisblock").attr("onclick", "btnLogout()");
+ 					$("#id_regisblock").attr("id", "user_logout");
+ 					var login_popup = document.getElementById('login');
+ 					login_popup.style.display = "none"
+ 					$("#exampleInputUsername").val("")
+ 					$("#exampleInputPassword").val("")
 
-  <!--用戶登入-->
-  <script type="text/javascript">
-    function userlogin() {
-      var csrftoken = getCookie('csrftoken');
-      email = document.getElementById("exampleInputUsername").value;
-      password = document.getElementById("exampleInputPassword").value;
-      if (email == '') {
-        $("#errorlogin").html("Please enter E-mail address.");
-      } else if (password == '') {
-        $("#errorlogin").html("Please enter Password.");
-      } else {
-        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-        $("#errorlogin").html("");
-        $.ajax({
-          type: "POST",
-          url: '/api/user/login/',
-          data: {
-            'csrfmiddlewaretoken': csrftoken,
-            'email': email,
-            'password': password,
-          },
-
-          success: function (data) {
-
-            console.log(data);
-            if (data['status'] == "login success") {
-
-              var registor = document.getElementById('id_regisblock')
-              var login = document.getElementById('click_login')
-              $("#click_login").html(email);
-              $("#click_login").attr("onclick", "btnUserInfo()");
-              $("#click_login").attr("id", "user_status");
-              $("#id_regisblock").html("Logout");
-              $("#id_regisblock").attr("onclick", "btnLogout()");
-              $("#id_regisblock").attr("id", "user_logout");
-              var login_popup = document.getElementById('login');
-              login_popup.style.display = "none"
-
-              btnSuccessAction()
-
-
-
-            } else if (data['message'] == "error email") {
-              $("#errorlogin").html("Please enter E-mail address.");
-            } else if (data['message'] == "error password") {
-              $("#errorlogin").html("Please enter password.");
-            } else {
-              $("#errorlogin").html("The E-mail and Password do not match.");
-            }
-          }
-        });
-      }
-    }
-  </script>
-
-
-  <!--用戶注冊-->
-  <script type="text/javascript">
-    function signup() {
-      email = document.getElementById("InputEmail").value;
-      fname = document.getElementById("InputFname").value;
-      lname = document.getElementById("InputLname").value;
-      password1 = document.getElementById("Password1").value;
-      password2 = document.getElementById("InputPassword2").value;
-      csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-      $("#erroremail").html("");
-      $("#errorpass").html("");
-      if (fname == "" || lname == "") {
-        $("#errorname").html("First Name and Last Name Required");
-      } else {
-
-        $.ajax({
-          type: "POST",
-          url: '/api/user/register/',
-          data: {
-            'csrfmiddlewaretoken': csrfmiddlewaretoken,
-            'first_name': fname,
-            'last_name': lname,
-            'email': email,
-            'password1': password1,
-            'password2': password2,
-          },
-          success: function (data) {
-            if (data['status'] == "register success") {
-              var registor = document.getElementById('registor');
-              registor.style.display = "none";
-              $.ajax({
-                type: "POST",
-                url: '/api/user/login/',
-                data: {
-                  'csrfmiddlewaretoken': csrfmiddlewaretoken,
-                  'email': email,
-                  'password': password1,
-                },
-
-                success: function (data) {
-
-                  console.log(data);
-                  if (data['status'] == "login success") {
-
-                    var registor = document.getElementById('id_regisblock')
-                    var login = document.getElementById('click_login')
-                    $("#click_login").html(email);
-                    $("#click_login").attr("onclick", "btnUserInfo()");
-                    $("#click_login").attr("id", "user_status");
-                    $("#id_regisblock").html("Logout");
-                    $("#id_regisblock").attr("onclick", "btnLogout()");
-                    $("#id_regisblock").attr("id", "user_logout");
-                    var login_popup = document.getElementById('login');
-                    login_popup.style.display = "none"
-
-                    btnSuccessAction()
+ 					btnSuccessAction()
 
 
 
-                  } else if (data['message'] == "error email") {
-                    $("#errorlogin").html("Please enter E-mail address.");
-                  } else if (data['message'] == "error password") {
-                    $("#errorlogin").html("Please enter password.");
-                  } else {
-                    $("#errorlogin").html("The E-mail and Password do not match.");
-                  }
-                }
-              });
+ 				} else if (data['message'] == "error email") {
+ 					$("#errorlogin").html("Please enter E-mail address.");
+ 				} else if (data['message'] == "error password") {
+ 					$("#errorlogin").html("Please enter password.");
+ 				} else {
+ 					$("#errorlogin").html("The E-mail and Password do not match.");
+ 				}
+ 			}
+ 		});
+ 	}
+ }
+
+</script>
+
+<script>
+//user signup
+ function signup() {
+ 	email = document.getElementById("InputEmail").value;
+ 	fname = document.getElementById("InputFname").value;
+ 	lname = document.getElementById("InputLname").value;
+ 	password1 = document.getElementById("Password1").value;
+ 	password2 = document.getElementById("InputPassword2").value;
+ 	csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+ 	$("#errorpassre").html("");
+ 	$("#erroremailre").html("");
+ 	var qualifyURL = $('head base').attr('href');
+ 	if (fname == "" || lname == "") {
+ 		$("#errorname").html("First Name and Last Name Required");
+ 	} else {
+
+ 		$.ajax({
+ 			type: "POST",
+ 			url: qualifyURL + 'api/user/',
+ 			data: {
+ 				'csrfmiddlewaretoken': csrfmiddlewaretoken,
+ 				'first_name': fname,
+ 				'last_name': lname,
+ 				'email': email,
+ 				'password1': password1,
+ 				'password2': password2,
+ 			},
+ 			success: function (data) {
+ 				if (data['status'] == "register success") {
+ 					var registor = document.getElementById('registor');
+ 					registor.style.display = "none";
+ 					$.ajax({
+ 						type: "POST",
+ 						url: 'http://127.0.0.1:8000/user/login/',
+ 						data: {
+ 							'csrfmiddlewaretoken': csrfmiddlewaretoken,
+ 							'email': email,
+ 							'password': password1,
+ 						},
+
+ 						success: function (data) {
+
+ 							console.log(data);
+ 							if (data['status'] == "login success") {
+
+ 								var registor = document.getElementById('id_regisblock')
+ 								var login = document.getElementById('click_login')
+ 								$("#click_login").html(email);
+ 								$("#click_login").attr("onclick", "btnUserInfo()");
+ 								$("#click_login").attr("id", "user_status");
+ 								$("#id_regisblock").html("Logout");
+ 								$("#id_regisblock").attr("onclick", "btnLogout()");
+ 								$("#id_regisblock").attr("id", "user_logout");
+ 								var login_popup = document.getElementById('login');
+ 								login_popup.style.display = "none"
+
+ 								btnSuccessAction()
+
+
+
+ 							} else if (data['message'] == "error email") {
+ 								$("#errorloginre").html("Please enter E-mail address.");
+ 							} else if (data['message'] == "error password") {
+ 								$("#errorloginre").html("Please enter password.");
+ 							} else {
+ 								$("#errorloginre").html("The E-mail and Password do not match.");
+ 							}
+ 						}
+ 					});
 
 
 
@@ -729,19 +1165,27 @@
 
 
 
-            } else {
-              if ("email" in data['message'])
-                $("#erroremail").html(data['message']['email'][0]);
-              if ("password2" in data['message'])
-                $("#errorpass").html(data['message']['password2'][0]);
-              if ("password1" in data['message'])
-                $("#errorpass").html(data['message']['password1'][0]);
-            }
-          }
-        })
-      }
-    }
-  </script>
+ 				} else {
+
+ 					if ("email" in data['message']) {
+ 						console.log("ERROR")
+ 						$("#erroremailre").html(data['message']['email'][0]);
+ 					}
+ 					if ("password2" in data['message']) {
+ 						$("#errorpassre").html(data['message']['password2'][0]);
+ 					}
+
+ 					if ("password1" in data['message']) {
+
+ 						$("#errorpassre").html(data['message']['password1'][0]);
+ 					}
+ 				}
+ 			}
+ 		})
+ 	}
+ }
+
+</script>
 
 
   <!--當用戶點視窗外就把popup screen close-->
@@ -750,11 +1194,20 @@
 
     var registor = document.getElementById('registor');
     var status = document.getElementById('operate_success');
+    var operate_fails = document.getElementById('operate_fails');
     var UserInfo = document.getElementById('UserInfo');
     var update = document.getElementById('update');
-
+    var confirm_popup = document.getElementById('confirm_popup');
+    var My_Favourite = document.getElementById('My_Favourite');
+    
     var status2 = document.getElementById('operate_success2');
     window.onclick = function (event) {
+      if (event.target == confirm_popup) {
+        confirm_popup.style.display = "none";
+      }
+      if (event.target == operate_fails) {
+        operate_fails.style.display = "none";
+      }
       if (event.target == login) {
         login.style.display = "none";
       }
@@ -768,7 +1221,10 @@
         registor.style.display = "none";
       }
       if (event.target == status2) {
-        location.reload();
+        status2.style.display = "none";
+      }
+      if (event.target == My_Favourite) {
+        My_Favourite.style.display = "none";
       }
     }
   </script>
@@ -849,7 +1305,7 @@
         border-right: solid 1px rgba(255, 255, 255, .2);
         text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
       }
-      
+
     }
 
     @media (max-width: 450.98px) {
@@ -876,7 +1332,7 @@
         border-right: solid 1px rgba(255, 255, 255, .2);
         text-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
       }
-      
+
     }
 
     #options ul li:last-child {
@@ -985,38 +1441,41 @@
       -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
       -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
 
-    }    @media (max-width: 550.98px) {
+    }
 
-.form-style-8 {
-font-family: 'Open Sans Condensed', arial, sans;
-width: 100%;
-height: 100%;
-padding: 30px;
-background: #FFFFFF;
-margin: 66px auto;
-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
--moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
--webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+    @media (max-width: 550.98px) {
 
-}
+      .form-style-8 {
+        font-family: 'Open Sans Condensed', arial, sans;
+        width: 100%;
+        height: 100%;
+        padding: 30px;
+        background: #FFFFFF;
+        margin: 66px auto;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+        -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+        -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
 
-}
-@media (max-width: 350.98px) {
+      }
 
-.form-style-8 {
-font-family: 'Open Sans Condensed', arial, sans;
-width: 100%;
-height: 100%;
-padding: 30px;
-background: #FFFFFF;
-margin: 104px auto;
-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
--moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
--webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+    }
 
-}
+    @media (max-width: 350.98px) {
 
-}
+      .form-style-8 {
+        font-family: 'Open Sans Condensed', arial, sans;
+        width: 100%;
+        height: 100%;
+        padding: 30px;
+        background: #FFFFFF;
+        margin: 104px auto;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+        -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+        -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+
+      }
+
+    }
 
 
     .form-style-8 h2 {
@@ -1029,20 +1488,21 @@ box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
       padding: 20px;
       margin: -55px -31px 31px -31px;
     }
+
     @media (max-width: 450.98px) {
 
       .form-style-8 h2 {
-    background: #4D4D4D;
-    text-transform: uppercase;
-    font-family: 'Open Sans Condensed', sans-serif;
-    color: #FFFFFF;
-    font-size: 18px;
-    font-weight: 100;
-    padding: 20px;
-    margin: -55px -31px 31px -31px;
-}
+        background: #4D4D4D;
+        text-transform: uppercase;
+        font-family: 'Open Sans Condensed', sans-serif;
+        color: #FFFFFF;
+        font-size: 18px;
+        font-weight: 100;
+        padding: 37px;
+        margin: -17px -31px 31px -31px;
+      }
     }
-    
+
     .form-style-8 input[type="text"],
     .form-style-8 input[type="date"],
     .form-style-8 input[type="datetime"],
@@ -1091,19 +1551,58 @@ box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
       text-transform: uppercase;
     }
 
+    .modal-confirm h4 {
+      display: inline-block;
+      font-size: 26px;
+    }
+
+    .modal-title {
+      font-family: inherit;
+      font-weight: 500;
+      line-height: 1.1;
+      color: inherit;
+    }
+
+    .modal-header {
+      padding-top: 29px;
+      border-bottom: none;
+      position: relative;
+    }
+
+    .modal-footer {
+      background: #ecf0f1;
+      border-color: #e6eaec;
+      text-align: right;
+      margin: 0 -20px -30px;
+      border-radius: 0 0 5px 5px;
+    }
+
+    .modal-confirm .modal-content {
+      padding: 20px;
+      border-radius: 5px;
+      border: none;
+    }
+
     .form-style-8 input[type="button"]:hover,
     .form-style-8 input[type="submit"]:hover {
       background: linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
       background-color: #34CACA;
+
+
+    }
     }
   </style>
-
+  <script>
+    function confirm_popup() {
+      document.getElementById('UserInfo').style.display = 'none'
+      document.getElementById('confirm_popup').style.display = 'block';
+    }
+  </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
   <script src="{% static 'js/csrf.js' %}"></script>
   <script src="{% static 'js/popper.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="https://stackpath.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></script>
   <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
   <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
   <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
@@ -1112,7 +1611,6 @@ box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
   <script src="{% static 'js/aos.js' %}"></script>
   <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
   <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
-  <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
   {% block script%} {% endblock %}

@@ -1,24 +1,19 @@
-
-       
-
-  
-
-
-
-
-
-
-
-
-
+from django.http import QueryDict
+from django.views.generic import View
+from django.http import JsonResponse
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response                            
 from django.shortcuts import redirect, render
 from mongoengine import *
 import requests
 import re
+from rest_framework_swagger.renderers import OpenAPIRenderer, SwaggerUIRenderer
 from django import db
 from django.contrib.auth import logout
 from collections import OrderedDict
+from django.views.decorators.csrf import csrf_exempt
 import xlwt
+import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -30,6 +25,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 import json
 from rest_framework.decorators import list_route
 from urllib.request import urlretrieve
+from django.core import serializers
 import os
 import random
 import sys
@@ -39,40 +35,57 @@ import random
 from django.contrib import auth
 from django.urls import reverse
 print(os.listdir())
-from cover_page.forms import SignUpForm , EditProfileForm
-from cover_page.models import User , Product
+from cover_page.forms import SignUpForm , EditProfileForm , Create_likeProduct
+from cover_page.models import User , Product, My_Favourite
+from rest_framework.decorators import api_view, renderer_classes
 from cover_page.serializers import UserSerializer , ProductSerializer
 # Create your views here.
 from rest_framework import viewsets
 
 
+def Cover_page(request):
+    return render(request,'index.html', {})
+
+def find_my_product(request):
+    images, urls, names, prices, tags = recent_crawler()
+    product_datas = [i for i in zip(images,urls,names,prices,tags)]
+    context = {}
+    product_datas = random.sample(product_datas,len(product_datas)) 
+    context['product_datas'] = product_datas
+    context["no_picture"] = "/images/s.gif"
+    context['length'] = len(tags)
+    return render(request,"search.html", context)
+
 # Create your views here.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+
+class UserViewSet(APIView):
     # /api/music/raw_sql_query/
-    @list_route(methods=["POST"],)
-    def UserInfo(self, request):
-        user = request.user
-        print(user)
-        return Response({'status':'info success','message':{'userId':user.id,'UserEmail':user.email,'UserFirstName':user.first_name,'UserLastName':user.last_name,'UserIsSuper':user.is_superuser,'UserDataJoined':user.date_joined,'UserLastLogin':user.last_login}}, status=status.HTTP_200_OK)
         
+    def delete(self,request):  
+        print("delete")  
         try:
+            print("delete   1",request.user.email)
+            u = User.objects.get(email = request.user.email)
+            u.delete()
+            return Response({'status':'delete success','message':""}, status=status.HTTP_200_OK)
+        except Exception as e :
+            print("delete   2" , e)
+            return Response({'status':'delete false','message':"The user not found"}, status=status.HTTP_200_OK)
             
-            user = request.user
-            print(user)
-            return Response({'status':'info success','message':{'userId':user.id,'UserEmail':user.email,'UserFirstName':user.first_name,'UserLastName':user.last_name,'UserIsSuper':user.is_superuser,'UserDataJoined':user.data_joined,'UserLastLogin':user.last_login}}, status=status.HTTP_200_OK)
+
+    def get(self, request):
+        try:
+            user = self.request.user
+            return Response({'status':'info success','message':{'userId':user.id,'UserEmail':user.email,'UserFirstName':user.first_name,'UserLastName':user.last_name,'UserIsSuper':user.is_superuser,'UserDataJoined':user.date_joined,'UserLastLogin':user.last_login}}, status=status.HTTP_200_OK)
+            
+            
         except :
-            return Response({'status':'info false','message':'login first'}, status=status.HTTP_200_OK)
+            return Response({'status':'info false','message':'please login first'}, status=status.HTTP_200_OK)
 
 
-    @list_route(methods=['post'])
-    def logout(self, request, ):
-        # simply delete the token to force a login
-        logout(request)
-        return Response({'status':'logout success', 'message':""}, status=status.HTTP_200_OK)
-    @list_route(methods=['post'])
-    def register(self, request):
+    
+    
+    def post(self, request):
         #email = User.fun_raw_sql_query(email=email)
         print('request',request)
         fname = request.POST.get('first_name')
@@ -80,6 +93,11 @@ class UserViewSet(viewsets.ModelViewSet):
         email = request.POST.get('email')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
+        print('fname',fname)
+        print('lname',lname)
+        print('email',email)
+        print('password1',password1)
+        print('password2',password2)
         data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
         form = SignUpForm(data = data)
         if form.is_valid():
@@ -90,27 +108,17 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = UserSerializer(email, many=True)
             return Response({'status':'register success', 'message':serializer.data}, status=status.HTTP_200_OK)
         else:
+            print(form.errors)
             return Response({'status':'register false', 'message':form.errors}, status=status.HTTP_200_OK)
-    @list_route(methods=['post'])
-    def login(self, request):
-        email = request.POST.get('email',None )
-        password = request.POST.get('password', None )
-
-        user = authenticate(email=email, password=password)
-        if user is not None:
-            if user.is_active:
-                email = User.fun_raw_sql_query(email=email)
-                serializer = UserSerializer(email, many=True)
-                login(request, user)
-                return Response({'status':'login success', 'message':serializer.data}, status=status.HTTP_200_OK)
-        else:
-                return Response({'status':'login falas', 'message':'no match any account'}, status=status.HTTP_200_OK)
-
-    @list_route(methods=['post'])
-    def UpdateInfo(self, request):
+    
+    
+    
+    def put(self, request):
         fname = request.POST.get('first_name')
         lname = request.POST.get('last_name')
-        email = request.POST.get('email')
+        
+        email = User.objects.get(email = request.user.email)
+        
         existing_pw = request.POST.get('existing_pw')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
@@ -129,206 +137,201 @@ class UserViewSet(viewsets.ModelViewSet):
             
         else:
             return Response({'status':'password falas', 'message':'existing password is not match'}, status=status.HTTP_200_OK)
-
-        
-       
-
   
-
-
-def signup(request):
-    #如果用戶己經登入
-    if request.method == 'POST':
-        fname = request.POST.get('first_name')
-        lname = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
-        form = SignUpForm(data = data)
-        if form.is_valid():
-            user = form.save(commit=False)
-            
-            print('user',user)
-            print('form',form)
-            user.is_active = True
-            user.save()
-            return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
-        else:
-            return HttpResponse(json.dumps({"message":form.errors}),content_type="application/json")
-    else:
-        fname = request.GET.get('first_name')
-        lname = request.GET.get('last_name')
-        email = request.GET.get('email')
-        password1 = request.GET.get('password1')
-        password2 = request.GET.get('password2')
-        data = {'first_name':fname, 'last_name':lname, 'email':email, 'password2':password2, 'password1':password1}
-        form = SignUpForm(data = data)
-        if form.is_valid():
-                user = form.save(commit=False)
-                print('user',user)
-                print('form',form)
-                user.is_active = True
-                user.save()
-                d={ 'status': 0,
-                    'message': 'Success'}
-                return JsonResponse(d)
-                
-        else:
-                d={ 'status': 0,
-                    'message': 'inactive'}
-                    
-                return JsonResponse(d)
-        d={ 'status': 0,
-                'message': 'Denied'}
-                    
-        return JsonResponse(d)
-        # return render(request, 'registration/signup.html', {'form':form})
-
-def loginAPI(request):
-        print('login')
-        if request.method == 'POST':
-            email= request.POST.get('email')
-            password = request.POST.get('password')
-            # stayloggedin = request.GET.get('stayloggedin')
-            # if stayloggedin == "true":
-              #  pass
-            # else:
-              #  request.session.set_expiry(0)
-            print(email)
-            print(password)
-            user = authenticate(email=email, password=password)
-            print(user)
-            if user is not None:
-                print('oooo')
-                if user.is_active:
-                    print('ookoko')
-                    login(request, user)
-                    print('loinged')
-                    return HttpResponse(json.dumps({"message": "Success"}),content_type="application/json")
-                else:
-                    print('kkkk')
-                    return HttpResponse(json.dumps({"message": "inactive"}), content_type="application/json")
-            else:
-                print('invalid')
-                return HttpResponse(json.dumps({"message": "invalid"}),content_type="application/json")
-            print('denied')
-            return HttpResponse(json.dumps({"message": "denied"}),content_type="application/json")
-        else:
-            get =request.GET
-            email = get.get('email')
-            password =get.get('password')
-            print(email)
-            print(password)
-            user = authenticate(email=email, password=password)
-            print(dir(user))
-            #帳號正確
-            try:
-                if user is not None:
-                #帳號被凍結
-                    if user.is_active:
-                        d={ 'status': 1,
-                            'message': 'success'}
-                        return JsonResponse(d)
-                    else: 
-                    #無凍結
-                        d={ 'status': 0,
-                            'message': 'inactive'}
-                        
-                        return JsonResponse(d)
-            #帳號不正確
-                else:
-                    d={'status': 2,
-                       'message': 'invalid'}
-                    return JsonResponse(d)
-                #server 沒有回應
-            except Exception as e:
-                d={'status': 3,
-                   'message': "denied",
-                    'reason': str(e)}
-                return JsonResponse(d)
-
-'''
-def login(request):
-    if request.method == "POST":
-        print('post')
-        #如果
-        refer = request.META.get('HTTP_REFERER', '')
-        login_form = LoginForm(request.POST)
-        print(login_form)
-        if login_form.is_valid():
-            print('valided')
-            print(login_form)
-            username = login_form.cleaned_data['username']
-            user = auth.authenticate(request, username = username, password=password)
-            if user is not None:
-                auth.login(request,user)
-                #成功登入, 返回登入時的頁面
-                return redirect(refer)
-            else:
-                print('login unsuccess')
-                login_form.add_error(None,'error login')
-                pass
-
-        else:
-            print('invalid')
-            context = {}
-            context['state'] = 'invalid'
-            print(context)
-            return redirect(refer, context)
-            pass
-            #登入資料出錯
-            
-    else:
-        username = request.POST.get('username',None)
-        password = request.POST.get('password',None)
-        user = auth.authenticate(request,username = username
-            ,password = password)
-        refer = request.META.get('HTTP_REFERER', '')
+@api_view(['POST'])
+def user_logout( request ):
+        # simply delete the token to force a login
+        logout(request)
+        return Response({'status':'logout success', 'message':""}, status=status.HTTP_200_OK)
+@api_view(['POST'])
+def user_login( request):
+        email = request.POST.get('email',None )
+        password = request.POST.get('password', None )
+        print(email)
+        print(password)
+        user = authenticate(email=email, password=password)
         if user is not None:
-            auth.login(request,user)
-            return redirect(refer)
+            if user.is_active:
+                email = User.fun_raw_sql_query(email=email)
+                serializer = UserSerializer(email, many=True)
+                login(request, user)
+                return Response({'status':'login success', 'message':serializer.data}, status=status.HTTP_200_OK)
         else:
-            return reden(request, 'error,html', {'message' : 'not correct'})'''
+                return Response({'status':'login falas', 'message':'no match any account'}, status=status.HTTP_200_OK)
+    
+    
+class Favourite_RestView(APIView):
+      
+    def delete(self, request,):
+        delete = QueryDict(request.body)
+        pk = delete.get('pk')
+        # delete an object and send a confirmation respons
+        print(pk)
+        My_Favourite.objects.get(pk = pk).delete()
+        response = Response(
+                        {"status":'delete success',},
+                        content_type="application/json",
+                        status=status.HTTP_200_OK,
+                    )
+        response.accepted_renderer = JSONRenderer()
+        response.accepted_media_type = "application/json"
+        response.renderer_context = {}
+        return response
+            
+    def post(self, request):
+            if request.user.is_authenticated:
+                print("is User");
+                price = request.POST.get('price')
+                name = request.POST.get('name')
+                link = request.POST.get('link')
+                My_Favourite.objects.create(user = request.user ,product_name = name,  product_link = link, product_price = price)
+                response = Response(
+                        {"status":'add success',"message":{"price":price,"name":name,"link":link}},
+                        content_type="application/json",
+                        status=status.HTTP_200_OK,
+                    )
+                response.accepted_renderer = JSONRenderer()
+                response.accepted_media_type = "application/json"
+                response.renderer_context = {}
+                return response
+            else:
+                print("not login")
+                response = Response(
+                            {"status":'add false',"message":"please login"},
+                            content_type="application/json",
+                            status=status.HTTP_200_OK,
+                        )
+                response.accepted_renderer = JSONRenderer()
+                response.accepted_media_type = "application/json"
+                response.renderer_context = {}
+                return response
+       
+    def get(self, request):
+        print("is User");
+        user = request.user
+        print(user)
+        context = My_Favourite.objects.values('product_name','product_link','product_price',"pk").filter(user = user)
+        count = My_Favourite.objects.filter(user = user).count()
+        data = list(context)
+        if count == 0 :
+            response = Response(
+                    {"status":'get MYFavourite success',"message":"no record"},
+                    content_type="application/json",
+                    status=status.HTTP_200_OK,
+                )
+        else:
+                    
+            response = Response(
+                    {"status":'get MYFavourite success',"message":data},
+                    content_type="application/json",
+                    status=status.HTTP_200_OK,
+                )
+        response.accepted_renderer = JSONRenderer()
+        response.accepted_media_type = "application/json"
+        response.renderer_context = {}
+        return response
 
-def Cover_page(request):
+
+
+@csrf_exempt
+@api_view(['GET'])
+def Searching_results(request):
+            request.encoding='utf-8'
+            #if  request.GET:
+            #    keyword = request.GET.get('keyword', None)
+            keyword = request.GET.get('keyword', "")
+            seach_type = request.GET.get('seach_type', "")
+            minarea = request.GET.get('minarea', "")
+            maxarea = request.GET.get('maxarea', "")
+            page = request.GET.get('page', "0")
+            page = int(page)+1
+            print('seach_type',seach_type)
+            links,url , name, money, date , tag, next_page = Search_start(keyword,  minarea, maxarea,seach_type,page)
+            
+            index = [i for i in range(0,len(links))]
+            contexts = []
+            print(tag)
+            for i in range(0,len(url)):
+                if url[i] == '/images/s.gif':
+                    url[i]='https://www.dcfever.com/images/s.gif'
+                context = {"url":url[i],"name":name[i],"product_links":links[i],"product_price":money[i],"date":date[i], "tag": tag[i]}
+                contexts.append(context)
+            data = zip(contexts)
+            response = Response(
+                    {"status":'search success',"next_page":next_page,"length":len(contexts),"search_keyword":keyword,"message":{"search_keyword":keyword,"result":data}},
+                    content_type="application/json",
+                    status=status.HTTP_200_OK,
+                )
+            response.accepted_renderer = JSONRenderer()
+            response.accepted_media_type = "application/json"
+            response.renderer_context = {}
+            print(len(tag))
+            return response
+            #data = {"status":'search success',"message":{"search_keyword":keyword,"result":data}}
+            #return Response(data)
+'''
+class RecentProductViewSet(APIView):
+    
+    def get(self, request):
+        Product.del_recent_product()
+        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
+        
+        product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
+        for i in product_info:
+            Product.objects.create(product_link=i[1], product_image_link=i[0],product_name=i[2],product_price=i[3],product_tag=i[4]) 
+        Dcfever_result = Product.sql_all_recent_product(product_tag = 'Dcfever')
+        Dcfever_serializer = ProductSerializer(Dcfever_result,many=True)
+        Carousell_result = Product.sql_all_recent_product(product_tag = 'Carousell')
+        Carousell_serializer = ProductSerializer(Carousell_result,many=True)
+        print('============')
+        return Response({'status':'success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)
+'''     
+ 
+
+class RecentProductViewSet(APIView):
+    def put(self, request):
+        total = Product.sql_all_recent_product(product_tag = "Dcfever")
+        if len(total) == 0:
+            return Response({'status':'fails', 'message':' recent product table is null'}, status=status.HTTP_200_OK)
+     
+        Product.del_recent_product()
+        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
+        product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
+        for i in product_info:
+            Product.objects.create(product_link=i[1], product_image_link=i[0],product_name=i[2],product_price=i[3],product_tag=i[4]) 
+        
+        return Response({'status':'success', 'message':' recent product table update success'}, status=status.HTTP_200_OK)
+     
+    def get(self, request):
+        Dcfever_result = Product.sql_all_recent_product(product_tag = 'Dcfever')
+        Dcfever_serializer = ProductSerializer(Dcfever_result,many=True)
+        Carousell_result = Product.sql_all_recent_product(product_tag = 'Carousell')
+        Carousell_serializer = ProductSerializer(Carousell_result,many=True)
+        print(Dcfever_result.count())
+        print(Carousell_result.count())
+        if Dcfever_result.count() == 0 and Carousell_result.count() == 0:
+            return Response({'status':'false', 'message':'the recent product table is null'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status':'success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)
+     
+    
     
 
-    return render(request,'index.html', {})
+    def post(self, request):
 
-def Web_scrawler(request):
-    request.encoding='utf-8'
-    #if  request.GET:
-    #    keyword = request.GET.get('keyword', None)
-    keyword = request.GET.get('keyword', None)
-    seach_type = request.GET.get('seach_type', None)
-    minarea = request.GET.get('minarea', None)
-    maxarea = request.GET.get('maxarea', None)
-    print('seach_type',seach_type)
-    links,url , name, money, date = Search_start(keyword,  minarea, maxarea,seach_type,)
-    context = {}
-    context["url"] = url
-    context["product_links"] = links
-    context["name"] = name
-    context["money"] = money
-    context["date"] = date
-    context["search_keyword"] = keyword
-    context["length"] = range(0,len(url))
-    context["total"] = len(url)
-    context["no_picture"] = "/images/s.gif"
-    return render(request,"keyword_result.html", context)
-
-def find_my_product(request):
-    images, urls, names, prices, tags = recent_crawler()
-    product_datas = [i for i in zip(images,urls,names,prices,tags)]
-    context = {}
-    product_datas = random.sample(product_datas,len(product_datas)) 
-    context['product_datas'] = product_datas
-    context["no_picture"] = "/images/s.gif"
-    context['length'] = len(tags)
-    return render(request,"Second_hand_product.html", context)
-
-
+        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
+        
+        product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
+        for i in product_info:
+            Product.objects.create(product_link=i[1], product_image_link=i[0],product_name=i[2],product_price=i[3],product_tag=i[4]) 
+        Dcfever_result = Product.sql_all_recent_product(product_tag = 'Dcfever')
+        Dcfever_serializer = ProductSerializer(Dcfever_result,many=True)
+        Carousell_result = Product.sql_all_recent_product(product_tag = 'Carousell')
+        Carousell_serializer = ProductSerializer(Carousell_result,many=True)
+        return Response({'status':'create recent product success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)
+     
+    
+   
 def download(url , name, money, date, search_keyword):
 
     if not os.path.exists(search_keyword):
@@ -391,6 +394,7 @@ def crawler_dcfever(search_keyword, page, min_price,max_price,seach_type):
         name = []
         money = []
         date = []
+        tag = []
         for first in data[::1]:
             for first_detail in range(len(first)):
                 if first_detail == 1:
@@ -401,12 +405,13 @@ def crawler_dcfever(search_keyword, page, min_price,max_price,seach_type):
                     money.append(first[first_detail])
                 if first_detail == 4:
                     date.append(first[first_detail])
+                tag.append('dcfever')
         name = [i.replace('/'," and ") for i in name]
         #link = [i.replace(i,"https://www.dcfever.com/trading/view.php?itemID="+i) for i in link]
         #print(link)
         #download(url , name, money, date, search_keyword)
-        return link,url , name, money, date,
-def crawler_carosell(search_keyword,  min_price,max_price,page = 1):
+        return link,url , name, money, date,tag 
+def crawler_carosell(search_keyword,  min_price,max_price,page):
         title = []
         link_urls = []
         image_urls = []
@@ -463,7 +468,7 @@ def crawler_carosell(search_keyword,  min_price,max_price,page = 1):
             doc=pq(res_html)
             next_page_session=doc('.pagination-next > a').attr('href')
             next_url=url_format(next_page_session)
-            next_page = 'https://hk.carousell.com'+next_page_session
+            #next_page = 'https://hk.carousell.com'+next_page_session
             #print(next_page)
                         
 
@@ -504,6 +509,7 @@ def crawler_carosell(search_keyword,  min_price,max_price,page = 1):
                 product_moneys = []
                 product_create_dates = []
                 product_image_links = []
+                tag = []
                 for i in datas:
                     #print(i)
                     for j in range(len(i)):
@@ -520,6 +526,7 @@ def crawler_carosell(search_keyword,  min_price,max_price,page = 1):
                             product_moneys.append(i[j])
                         if j == 4:
                             product_create_dates.append(i[j])
+                        tag.append('Carosell')
                 '''print('product_links',product_links)
                 print('')
                 print('')
@@ -552,11 +559,11 @@ def crawler_carosell(search_keyword,  min_price,max_price,page = 1):
                     processed_date.append(date+' '+time)
 
 
-        return (product_links, product_image_links,product_names,product_moneys,processed_date)
+        return (product_links, product_image_links,product_names,product_moneys,processed_date, tag)
                      
                         # no next page
             
-def Search_start(keyword, min_price="",max_price="",seach_type=None ,page=1,):
+def Search_start(keyword, min_price="",max_price="",seach_type=None ,page = 1,):
     data = []
     if seach_type == 'Photography':
         seach_type = '1'
@@ -577,20 +584,44 @@ def Search_start(keyword, min_price="",max_price="",seach_type=None ,page=1,):
     if seach_type == 'Mobile Communication':
         seach_type = '4'
     print('seach_type',seach_type)
-
-    dclink,dcurl , dcname, dcmoney, dcdate = crawler_dcfever(keyword, page ,min_price,max_price, seach_type)
-    calink,caproduct_links,caproduct_names,caproduct_moneys,caproduct_create_dates = crawler_carosell(keyword,min_price,max_price,page)
-    for i in caproduct_links:
-        dcurl.append(i)
-    for i in caproduct_names:
-        dcname.append(i)
-    for i in caproduct_moneys:
-        dcmoney.append(i)
-    for i in caproduct_create_dates:
-        dcdate.append(i)
+    total_link = []
+    total_url = []
+    total_name = []
+    total_money = []
+    total_date = []
+    total_tag = []
+    total_next_page = []
+    dclink,dcurl , dcname, dcmoney, dcdate , dctag = crawler_dcfever(keyword, page ,min_price,max_price, seach_type )
+    calink,caproduct_links,caproduct_names,caproduct_moneys,caproduct_create_dates, ca_tag= crawler_carosell(keyword,min_price,max_price,page)
+    for i in dclink:
+        total_link.append(i)
     for i in calink:
-        dclink.append(i)
-    return (dclink,dcurl , dcname, dcmoney, dcdate)
+        total_link.append(i)
+    for i in dcurl:
+        total_url.append(i)
+    for i in caproduct_links:
+        total_url.append(i)
+    for i in dcname:
+        total_name.append(i)
+    for i in caproduct_names:
+        total_name.append(i)
+    for i in dcmoney:
+        total_money.append(i)
+    for i in caproduct_moneys:
+        total_money.append(i)
+    for i in dcdate:
+        total_date.append(i)
+    for i in caproduct_create_dates:
+        total_date.append(i)
+    for i in dctag:
+        total_tag.append(i)
+    for i in ca_tag:
+        total_tag.append(i)
+    
+    next_page = page+1
+
+    print(total_next_page)
+    return (total_link,total_url , total_name, total_money, total_date, total_tag,next_page)
 #dcfever_data = crawler_dcfever('iphone',1,'','')
 #print(dcfever_data)
 #print(Search_start('iphone'))
@@ -670,14 +701,18 @@ def recent_crawler_carousell():
             prices.append(i[3])
             tag.append('Carousell')
         if len(images) == 0:
-            print('======================================')
-            images, urls, names, prices, tag = recent_crawler_carousell()
-
+            print('=========')
+            #images, urls, names, prices, tag = recent_crawler_carousell()
+            pass
 
         return images, urls, names, prices, tag
 def recent_crawler():
     dclink,dcurl , dcname, dcmoney, dctag = recent_crawler_dcfever()
-    calink,caproduct_links,caproduct_names,caproduct_moneys,catag = recent_crawler_carousell()
+    try:
+        calink,caproduct_links,caproduct_names,caproduct_moneys,catag = recent_crawler_carousell()
+    except Exception as e :
+        pass
+
     for i in caproduct_links:
         dcurl.append(i)
     for i in caproduct_names:
@@ -691,29 +726,3 @@ def recent_crawler():
     return (dclink,dcurl , dcname, dcmoney,dctag)
 #print(crawler_carosell("iphone", 100,200, page = 3))
 
-class ProductViewSet(viewsets.ModelViewSet):
-    def a ():
-        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
-        return product_link, product_image_link, product_name, product_price, product_tag
-    
-    product_link, product_image_link, product_name, product_price, product_tag = a()
-    product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
-    for i in product_info:
-        Product.objects.create(product_link=i[0], product_image_link=i[1],product_name=i[2],product_price=i[3],product_tag=i[4]) 
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    
-    @list_route(methods=['post'])  
-    def recent_product(self, request):
-        Product.del_recent_product()
-        product_link, product_image_link, product_name, product_price, product_tag = recent_crawler()
-        
-        product_info = list(zip(product_link, product_image_link, product_name, product_price, product_tag))
-        for i in product_info:
-            Product.objects.create(product_link=i[1], product_image_link=i[0],product_name=i[2],product_price=i[3],product_tag=i[4]) 
-        Dcfever_result = Product.sql_all_recent_product(product_tag = 'Dcfever')
-        Dcfever_serializer = ProductSerializer(Dcfever_result,many=True)
-        Carousell_result = Product.sql_all_recent_product(product_tag = 'Carousell')
-        Carousell_serializer = ProductSerializer(Carousell_result,many=True)
-        print('============')
-        return Response({'status':'success', 'message':{'Carousell':Carousell_serializer.data,'Dcfever':Dcfever_serializer.data}}, status=status.HTTP_200_OK)
