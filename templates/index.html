@@ -27,7 +27,7 @@ active
               <span class="location_slider-item0 d-block mb-3"><i class="icon-my_location"></i>  </span>
               <hr>
               <span class="price_slider-item0"></span>
-              <a href="" class="btn-custom0 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
+              <a  Target="_new" href="" class="btn-custom0 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@ active
               <span class="location_slider-item1 d-block mb-3"><i class="icon-my_location"></i> </span>
               <hr>
               <span class="price_slider-item1"></span>
-              <a href="" class="btn-custom1 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span> </a>
+              <a  Target="_new"  href="" class="btn-custom1 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span> </a>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@ active
                 <span class="location_slider-item2 d-block mb-3"><i class="icon-my_location_slider-item2"></i> </span>
                 <hr>
                 <span class="price_slider-item2"></span>
-                <a href="" class="btn-custom2 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
+                <a  Target="_new" href="" class="btn-custom2 p-3 px-4 bg-primary">View Details <span class="icon-plus ml-1"></span></a>
               </div>
             </div>
           </div>
@@ -147,7 +147,7 @@ active
             name = data['message']['Carousell'][i]['product_name'];
             price = data['message']['Carousell'][i]['product_price'];
             tag = data['message']['Carousell'][i]['product_tag'];
-        other_recent = '<div class="item"> <div class="properties"> <a href="'+ link +'" class="img d-flex justify-content-center align-items-center" style="background-image: url('+ img +');"><div class="icon d-flex justify-content-center align-items-center"><span class="icon-search2"></span></div>              </a>              <div class="text p-3">                <span class="status sale">'+tag+'</span><div class="d-flex">                   <div class="one">                     <h3><a href="'+link+'">'+ name +'</a></h3>                  </div>                  <div class="1">                    <span class="price">'+price+'</span>                  </div>                </div>              </div>            </div>          </div>'
+        other_recent = '<div class="item"> <div class="properties"> <a  Target="_new" href="'+ link +'" class="img d-flex justify-content-center align-items-center" style="background-image: url('+ img +');"><div class="icon d-flex justify-content-center align-items-center"><span class="icon-search2"></span></div>              </a>              <div class="text p-3">                <span class="status sale">'+tag+'</span><div class="d-flex">                   <div class="one">                     <h3><a Target="_new"  href="'+link+'">'+ name +'</a></h3>                  </div>                  <div class="1">                    <span class="price">'+price+'</span>                  </div>                </div>              </div>            </div>          </div>'
                   $('.properties-slider').append(other_recent)
         }
         for (var i in data['message']['Dcfever']) {
@@ -162,7 +162,7 @@ active
             name = data['message']['Dcfever'][i]['product_name'];
             price = data['message']['Dcfever'][i]['product_price'];
             tag = data['message']['Dcfever'][i]['product_tag'];
-          other_recent = '<div class="item"> <div class="properties"> <a href="'+ link +'" class="img d-flex justify-content-center align-items-center" style="background-image: url('+ img +');"><div class="icon d-flex justify-content-center align-items-center"><span class="icon-search2"></span></div>              </a>              <div class="text p-3">                <span class="status sale">'+tag+'</span><div class="d-flex">                   <div class="one">                     <h3><a href="'+link+'">'+ name +'</a></h3>                  </div>                  <div class="1">                    <span class="price">'+price+'</span>                  </div>                </div>              </div>            </div>          </div>'
+          other_recent = '<div class="item"> <div class="properties"> <a  Target="_new" href="'+ link +'" class="img d-flex justify-content-center align-items-center" style="background-image: url('+ img +');"><div class="icon d-flex justify-content-center align-items-center"><span class="icon-search2"></span></div>              </a>              <div class="text p-3">                <span class="status sale">'+tag+'</span><div class="d-flex">                   <div class="one">                     <h3><a Target="_new"  href="'+link+'">'+ name +'</a></h3>                  </div>                  <div class="1">                    <span class="price">'+price+'</span>                  </div>                </div>              </div>            </div>          </div>'
                   $('.properties-slider').append(other_recent)
         }
 

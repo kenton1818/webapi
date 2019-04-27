@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-  <base href="http://34.92.149.102/">
+  <base href="http://127.0.0.1:8000/">
   {% csrf_token %}
   <title>Price Aggregator -- Save Your Money</title>
   <meta charset="utf-8">
@@ -187,6 +187,22 @@
     </center>
   </div>
 
+  
+  <div id="price_IR" class="modal">
+    <div class='loginmodal-content animate'>
+      <div class="imgcontainer" text-align="center" margin="24px 0 12px 0" position="relative">
+        <span onclick="document.getElementById('price_IR').style.display='none'" class="close"
+          title="Close PopUp">&times;</span>
+          <img src="{% static '/images/loading.gif' %}" class="">
+        <h1 style="text-align:center;font-size: 23px;" id = "ir_title"></h1>
+      </div>
+      <center>
+        <button type="button" class="btn btn-primary btn-lg btn-block login-btn" style="max-width:500px"
+          onclick="btnOkAction()">OK</button>
+    </div>
+    </center>
+  </div>
+
 
   <div id="operate_fails" class="modal">
     <div class='loginmodal-content animate'>
@@ -345,6 +361,7 @@
         <ul class="navbar-nav ml-auto" id='home_bar'>
           <li class="nav-item {% block home_active %}{% endblock %}"><a href="/" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="/find_my_product/" class="nav-link">Second Hand Product</a></li>
+          <li class="nav-item"><a href="/docs/" class="nav-link">API docs</a></li>
           
           {% if user.is_authenticated %}
 
@@ -977,7 +994,7 @@
  					price = context = data['message'][i]['product_price']
  					link = context = data['message'][i]['product_link']
  					console.log()
- 					My_Favourite_result = '<tr class = "' + classname + '-trID' + '"> <td><a href="'+link+'">' + name + '</a></td><td>' + price + '</td><td><form><input class =' +
+ 					My_Favourite_result = '<tr class = "' + classname + '-trID' + '"> <td><a  Target="_new" href="'+link+'">' + name + '</a></td><td>' + price + '</td><td><form><input class =' +
  						classname +
  						'  style="border: 0px;outline:none;cursor: pointer ;color: #f05d23;" type="hidden" name="product_price" value="' +
  						item_id + '" /><button class = "' + buttonname + '" id = ' + classname +
