@@ -145,7 +145,7 @@ $.ajax({
 		$(".col-md-4").remove();
 
 		$(".search_keyword").remove();
-		title = '<h1 class="search_keyword" style = "font-size:4em">Showing results for "' + data['search_keyword'] + '"</h1>'
+		title = '<h1 class="search_keyword" style = "font-size:5em">Showing results for "' + data['search_keyword'] + '"</h1>'
 		$('#search_result').append(title)
 		$(".btn-primary").attr('value', 'Search');
 
@@ -159,17 +159,17 @@ $.ajax({
 			product_price = data['message']['result'][i][0]['product_price']
 			url = data['message']['result'][i][0]['url']
 			tag = data['message']['result'][i][0]['tag']
-			console.log(name)
+			console.log(tag)
 			classname = "add_product" + i
 			console.log(classname)
 			buttonname = "submit_form" + i
 			search_result =
 				'<form  class="col-md-4 ftco-animate fadeInUp ftco-animated ' + classname +
-				'" >	<div class="properties"><a href="' + product_links +
+				'" >	<div class="properties"><a target="_blank" href="' + product_links +
 				'" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(' +
 				url +
 				');">	<div class="icon d-flex justify-content-center align-items-center">	<span class="icon-search2"></span></div></a><div class="text p-3"><span class="status sale">' +
-				tag + '</span><div class="d-flex"><div class="one"><h3><a href=' + product_links +
+				tag + '</span><div class="d-flex"><div class="one"><h3><a target="_blank" href=' + product_links +
 				'> ' + name + '<div class = ' + classname + '-name' + ' style="display: none;" >' +
 				name + '</div></a></h3><p>' + date +
 				'</p>	</div><div class="two"><span class="price"> ' +
