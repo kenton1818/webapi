@@ -165,11 +165,11 @@ $.ajax({
 			buttonname = "submit_form" + i
 			search_result =
 				'<form  class="col-md-4 ftco-animate fadeInUp ftco-animated ' + classname +
-				'" >	<div class="properties"><a Target="_new" href="' + product_links +
+				'" >	<div class="properties"><a href="' + product_links +
 				'" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(' +
 				url +
 				');">	<div class="icon d-flex justify-content-center align-items-center">	<span class="icon-search2"></span></div></a><div class="text p-3"><span class="status sale">' +
-				tag + '</span><div class="d-flex"><div class="one"><h3><a  Target="_new" href=' + product_links +
+				tag + '</span><div class="d-flex"><div class="one"><h3><a href=' + product_links +
 				'> ' + name + '<div class = ' + classname + '-name' + ' style="display: none;" >' +
 				name + '</div></a></h3><p>' + date +
 				'</p>	</div><div class="two"><span class="price"> ' +
@@ -190,21 +190,30 @@ $.ajax({
 				event) {
 				console.log(event.target.id)
 				event.preventDefault();
+				var price = $("." + event.target.id + "-price").val()
 				var name = $("." + event.target.id + "-name").text()
+				var link = $("." + event.target.id + "-link").val()
+				var tag = $("." + event.target.id + "-tag").val()
 				var csrftoken = getCookie('csrftoken');
 				var qualifyURL = $('head base').attr('href');
-				document.getElementById('price_IR').style.display = 'block';
 				$.ajax({
-					type: "GET",
-					url: qualifyURL + "api/ir/",
+					type: "POST",
+					url: qualifyURL + "api/Favourite/",
 					data: {
-						'title': name,
+						'price': price,
+						'name': name,
+						'link': link,
 						'csrfmiddlewaretoken': csrftoken,
 
 					}, // serializes the form's elements.
 					success: function (data) {
 						if (data['status'] == "add success") {
-							$("#ir_title").html("success")
+							document.getElementById('operate_success').style
+								.display = 'block';
+						}
+						if (data['status'] == "add false") {
+							document.getElementById('operate_fails').style
+								.display = 'block';
 						}
 					}
 				});
