@@ -60,7 +60,7 @@ def find_my_product(request):
 
 class UserViewSet(APIView):
     # /api/music/raw_sql_query/
-        
+    @csrf_exempt
     def delete(self,request):  
         print("delete")  
         try:
@@ -72,7 +72,7 @@ class UserViewSet(APIView):
             print("delete   2" , e)
             return Response({'status':'delete false','message':"The user not found"}, status=status.HTTP_200_OK)
             
-
+    @csrf_exempt
     def get(self, request):
         try:
             user = self.request.user
@@ -84,7 +84,7 @@ class UserViewSet(APIView):
 
 
     
-    
+    @csrf_exempt
     def post(self, request):
         #email = User.fun_raw_sql_query(email=email)
         print('request',request)
@@ -112,7 +112,7 @@ class UserViewSet(APIView):
             return Response({'status':'register false', 'message':form.errors}, status=status.HTTP_200_OK)
     
     
-    
+    @csrf_exempt
     def put(self, request):
         fname = request.POST.get('first_name')
         lname = request.POST.get('last_name')
@@ -398,6 +398,7 @@ def crawler_dcfever(search_keyword, page, min_price,max_price,seach_type):
         for first in data[::1]:
             for first_detail in range(len(first)):
                 if first_detail == 1:
+                    tag.append('dcfever')
                     url.append(first[first_detail])
                 if first_detail == 2:
                     name.append(first[first_detail])
@@ -405,7 +406,7 @@ def crawler_dcfever(search_keyword, page, min_price,max_price,seach_type):
                     money.append(first[first_detail])
                 if first_detail == 4:
                     date.append(first[first_detail])
-                tag.append('dcfever')
+                
         name = [i.replace('/'," and ") for i in name]
         #link = [i.replace(i,"https://www.dcfever.com/trading/view.php?itemID="+i) for i in link]
         #print(link)
@@ -516,6 +517,7 @@ def crawler_carosell(search_keyword,  min_price,max_price,page):
                         if j == 0:
                             a = i[1].replace('\u002F','-')
                             a = i[1].replace(' ','-')
+                            tag.append('Carosell')
                             product_links.append('https://hk.carousell.com/p/'+a+'-'+str(i[j]))
                         if j == 1:
                             a = i[1].replace('\u002F',' ')
@@ -526,7 +528,7 @@ def crawler_carosell(search_keyword,  min_price,max_price,page):
                             product_moneys.append(i[j])
                         if j == 4:
                             product_create_dates.append(i[j])
-                        tag.append('Carosell')
+                        
                 '''print('product_links',product_links)
                 print('')
                 print('')
@@ -593,6 +595,11 @@ def Search_start(keyword, min_price="",max_price="",seach_type=None ,page = 1,):
     total_next_page = []
     dclink,dcurl , dcname, dcmoney, dcdate , dctag = crawler_dcfever(keyword, page ,min_price,max_price, seach_type )
     calink,caproduct_links,caproduct_names,caproduct_moneys,caproduct_create_dates, ca_tag= crawler_carosell(keyword,min_price,max_price,page)
+    print("total_tag",total_tag)
+    print("len_dctag",len(dctag))
+    print("len_dclink",len(dclink))
+    print("len_dctag",len(dctag))
+    print("len_calink",len(calink))
     for i in dclink:
         total_link.append(i)
     for i in calink:
@@ -614,6 +621,7 @@ def Search_start(keyword, min_price="",max_price="",seach_type=None ,page = 1,):
     for i in caproduct_create_dates:
         total_date.append(i)
     for i in dctag:
+        
         total_tag.append(i)
     for i in ca_tag:
         total_tag.append(i)

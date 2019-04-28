@@ -25,10 +25,10 @@ SECRET_KEY = 'oe_=zb%bnzl(6j85$79&sh*(kfi2iwa_pg#7&4zinyui#!o^0n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS =  ["34.92.149.102","127.0.0.1"]
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS =  ["34.92.149.102","127.0.0.1"]
 LOGIN_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'cover_page.User'
 # Application definition
@@ -49,8 +49,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.common.CommonMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
