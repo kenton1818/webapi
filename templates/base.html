@@ -945,6 +945,7 @@
  //Favourite
  function btnMYFavourite() {
  	var csrftoken = getCookie('csrftoken');
+   $("#My_Favourite_result").html("");
  	var qualifyURL = $('head base').attr('href');
  	$.ajax({
  		type: "GET",
@@ -1007,7 +1008,6 @@
  							},
  							success: function (data) {
  								if (data['status'] == "delete success") {
- 									alert("success")
  									$(tr_class).hide();
 
  								}
